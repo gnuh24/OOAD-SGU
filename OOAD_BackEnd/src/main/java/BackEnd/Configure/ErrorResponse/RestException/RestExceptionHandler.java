@@ -1,7 +1,8 @@
 package BackEnd.Configure.ErrorResponse.RestException;
 
 import java.io.IOException;
-    import java.util.HashMap;
+import java.util.Arrays;
+import java.util.HashMap;
     import java.util.Map;
 
     import BackEnd.Configure.ErrorResponse.AuthException.*;
@@ -39,8 +40,8 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<Object> handleAll(Exception exception) {
 
-        String message = "Lỗi không mong muốn !!";
-        String detailMessage = exception.getLocalizedMessage();
+        String message = exception.getLocalizedMessage();
+        String detailMessage = Arrays.toString(exception.getStackTrace());
         int code = 1;
         String moreInformation = "http://localhost:8080/api/v1/exception/1";
 

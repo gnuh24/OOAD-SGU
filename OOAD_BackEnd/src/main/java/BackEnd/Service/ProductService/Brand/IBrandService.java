@@ -17,9 +17,9 @@ public interface IBrandService {
 
     Brand getBrandById(Integer id);
 
-    Brand createBrand(BrandCreateForm form) throws IOException;
+    Brand createBrand(BrandCreateForm form) throws IOException, Exception;
 
-    Brand updateBrand(BrandUpdateForm form) throws IOException;
+    Brand updateBrand(BrandUpdateForm form) throws IOException, Exception;
 
     void deleteBrand(Integer brandId);
 

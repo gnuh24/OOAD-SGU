@@ -66,14 +66,14 @@ public class BrandController {
 
     @PostMapping()
     //API tạo `Brand`
-    public BrandDTO createBrand(@ModelAttribute @Valid BrandCreateForm form) throws IOException {
+    public BrandDTO createBrand(@ModelAttribute @Valid BrandCreateForm form) throws Exception {
         Brand entity = brandService.createBrand(form);
         return modelMapper.map(entity, BrandDTO.class);
     }
 
     @PatchMapping()
     //API Update `Brand` mới
-    public BrandDTO updateBrand(@ModelAttribute @Valid BrandUpdateForm form) throws IOException {
+    public BrandDTO updateBrand(@ModelAttribute @Valid BrandUpdateForm form) throws Exception {
         Brand entity = brandService.updateBrand(form);
         return modelMapper.map(entity, BrandDTO.class);
     }
