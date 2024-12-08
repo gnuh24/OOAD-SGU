@@ -17,6 +17,8 @@ public class BatchDTO {
 
     private Integer quantity;
 
+    private Integer maxQuantity;
+
     @JsonFormat(pattern = "HH:mm:ss dd/MM/yyyy")
     private LocalDateTime receivingTime;
 

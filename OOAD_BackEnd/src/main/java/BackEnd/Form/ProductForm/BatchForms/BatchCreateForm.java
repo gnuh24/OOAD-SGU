@@ -16,4 +16,6 @@ public class BatchCreateForm {
 
     private Integer quantity;
 
+    private Integer maxQuantity;
+
 }

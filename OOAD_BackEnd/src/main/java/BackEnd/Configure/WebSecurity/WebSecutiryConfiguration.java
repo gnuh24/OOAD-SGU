@@ -74,17 +74,13 @@ public class WebSecutiryConfiguration {
 
 
                         // Các API `Product`
-                        .requestMatchers(HttpMethod.GET, "/Product/Admin").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Product/Admin/{shoeId}").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Product/CommonUser").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Product/CommonUser/{shoeId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Product").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/Product").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/Product/Admin")                              .hasAnyAuthority("Manager", "Employee")
+                        .requestMatchers(HttpMethod.GET, "/Product/Admin/{shoeId}")                     .hasAnyAuthority("Manager", "Employee")
+                        .requestMatchers(HttpMethod.GET, "/Product/CommonUser")                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Product/CommonUser/{shoeId}")                .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Product")                                   .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.PATCH, "/Product")                                  .hasAnyAuthority("Manager")
 
-                        // Các API `Batch`
-                    .requestMatchers(HttpMethod.GET, "/Batch/{productId}").hasAnyAuthority("Admin")
-                    .requestMatchers(HttpMethod.POST, "/Batch").hasAnyAuthority("Admin")
-                    .requestMatchers(HttpMethod.PATCH, "/Batch").hasAnyAuthority("Admin")
 
 
                     // TODO: Các API liên quan đến `Account`

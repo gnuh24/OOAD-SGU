@@ -61,11 +61,11 @@ public class InventoryReportService implements IInventoryReportService {
         inventoryReport = inventoryReportRepository.save(inventoryReport);
         for(InventoryReportDetailCreateFormForFirstTime detailForm: form.getInventoryReportDetailCreateFormList()){
 
-            if (detailForm.getIdProductId() == null){
-                ProductCreateForm productCreateForm = new ProductCreateForm(detailForm.getProductName());
-                Product newProduct = productService.createProduct(productCreateForm);
-                detailForm.setIdProductId(newProduct.getId());
-            }
+//            if (detailForm.getIdProductId() == null){
+//                ProductCreateForm productCreateForm = new ProductCreateForm(detailForm.getProductName());
+//                Product newProduct = productService.createProduct(productCreateForm);
+//                detailForm.setIdProductId(newProduct.getId());
+//            }
 
             InventoryReportDetailCreateForm detailCreateForm = modelMapper.map(detailForm, InventoryReportDetailCreateForm.class);
             detailCreateForm.setIdInventoryReportId(inventoryReport.getId());

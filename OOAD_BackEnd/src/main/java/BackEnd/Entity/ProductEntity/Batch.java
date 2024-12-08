@@ -24,6 +24,9 @@ public class Batch {
     private Integer quantity;
 
     @Column(nullable = false)
+    private Integer maxQuantity;
+
+    @Column(nullable = false)
     private LocalDateTime receivingTime = LocalDateTime.now();
 
     @ManyToOne

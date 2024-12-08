@@ -3,13 +3,16 @@ package BackEnd.Service.ProductService.Product;
 import BackEnd.Entity.ProductEntity.Brand;
 import BackEnd.Entity.ProductEntity.Category;
 import BackEnd.Entity.ProductEntity.Product;
+import BackEnd.Form.ProductForm.BatchForms.BatchCreateForm;
 import BackEnd.Form.ProductForm.ProductForms.*;
 import BackEnd.Other.CloundinaryServices;
 import BackEnd.Repository.ProductRepository.IProductRepository;
+import BackEnd.Service.ProductService.Batch.IBatchService;
 import BackEnd.Service.ProductService.Brand.IBrandService;
 import BackEnd.Service.ProductService.Category.ICategoryService;
 import BackEnd.Specification.ProductSpecification.ProductSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,6 +29,10 @@ public class ProductService implements IProductService {
 
     @Autowired
     private IBrandService brandService;
+
+    @Autowired
+    @Lazy
+    private IBatchService batchService;
 
 
     @Autowired
@@ -61,14 +68,30 @@ public class ProductService implements IProductService {
         Product entity = new Product();
 
         entity.setProductName(form.getProductName());
+        entity.setAbv(form.getAbv());
+        entity.setOrigin(form.getOrigin());
+        entity.setCapacity(form.getCapacity());
+        entity.setDescription(form.getDescription());
 
-        Brand brand = brandService.getBrandById(1);
+        Brand brand = brandService.getBrandById(form.getBrandId());
         entity.setBrand(brand);
 
-        Category category = categoryService.getCategoryById(1);
+        Category category = categoryService.getCategoryById(form.getCategoryId());
         entity.setCategory(category);
 
-        return productRepository.save(entity);
+        entity.setImage(CloundinaryServices.createImageFromMultipart(form.getImage()));
+
+        entity = productRepository.save(entity);
+
+        BatchCreateForm batchCreateForm = new BatchCreateForm();
+        batchCreateForm.setUnitPrice(0);
+        batchCreateForm.setProductId(entity.getId());
+        batchCreateForm.setQuantity(0);
+        batchCreateForm.setMaxQuantity(0);
+
+        batchService.createBatch(batchCreateForm);
+
+        return entity;
     }
 
     @Override

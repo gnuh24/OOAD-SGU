@@ -17,6 +17,20 @@ public class ProductCreateForm {
     @Size(max = 1000, message = "Product name cannot exceed 1000 characters")
     private String productName;
 
+    private MultipartFile image;
+
+    private String origin;
+
+    private Integer capacity;
+
+    private Integer abv;
+
+    private String description;
+
+    private Integer brandId;
+
+    private Integer categoryId;
+
 
 }
 
