@@ -28,12 +28,6 @@ public class UserInformationController {
     @Autowired
     private IAccountService accountService;
 
-    @PostMapping()
-    public ResponseEntity<UserInformationDTOForOrder> createNewUser(@Valid @ModelAttribute UserInformationCreateForm userCreateForm) {
-        UserInformation userInformation = informationService.createUser(userCreateForm);
-        UserInformationDTOForOrder dto = modelMapper.map(userInformation, UserInformationDTOForOrder.class);
-        return ResponseEntity.ok(dto);
-    }
 
     @PatchMapping()
     public UserInformationDTOForOrder updateAccount(@ModelAttribute @Valid UserInformationUpdateForm form){

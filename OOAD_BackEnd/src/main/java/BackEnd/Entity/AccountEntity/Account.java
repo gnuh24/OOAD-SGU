@@ -58,32 +58,8 @@ public class Account implements UserDetails {
         return getUserInformation().getEmail();
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return status;
-    }
-
     public enum Role {
-        User, Admin
+        User, Admin, Manager, Employee
     }
-
-//    public enum AccountType {
-//        FACEBOOK, GOOGLE, WEB, OTHER
-//    }
 
 }

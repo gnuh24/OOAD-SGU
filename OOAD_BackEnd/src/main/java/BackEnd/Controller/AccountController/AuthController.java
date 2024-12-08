@@ -6,7 +6,7 @@ import BackEnd.Form.AuthForm.LoginInfoDTO;
 import BackEnd.Form.AuthForm.LoginInputForm;
 import BackEnd.Service.AccountServices.AccountService.IAccountService;
 import BackEnd.Service.AccountServices.AuthService.AuthService;
-import BackEnd.Service.AccountServices.AuthService.JWTUtils;
+import BackEnd.Configure.WebSecurity.JWTUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

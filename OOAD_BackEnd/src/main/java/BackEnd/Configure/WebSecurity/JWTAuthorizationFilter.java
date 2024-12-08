@@ -3,7 +3,6 @@ import BackEnd.Configure.ErrorResponse.AuthException.AuthExceptionHandler;
 import BackEnd.Configure.ErrorResponse.AuthException.InvalidJWTSignatureException;
 import BackEnd.Configure.ErrorResponse.AuthException.TokenExpiredException;
 import BackEnd.Service.AccountServices.AccountService.IAccountService;
-import BackEnd.Service.AccountServices.AuthService.JWTUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -20,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
 @Component

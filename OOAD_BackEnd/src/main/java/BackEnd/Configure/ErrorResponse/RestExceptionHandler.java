@@ -1,4 +1,4 @@
-package BackEnd.Configure.ErrorResponse.RestException;
+package BackEnd.Configure.ErrorResponse;
 
 import java.io.IOException;
 import java.util.Arrays;

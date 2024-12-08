@@ -1,7 +1,6 @@
 package BackEnd.Service.ShoppingServices.OrderServices;
 
 import BackEnd.Entity.AccountEntity.Account;
-import BackEnd.Entity.AccountEntity.UserInformation;
 import BackEnd.Entity.ShoppingEntities.Order;
 import BackEnd.Entity.ShoppingEntities.OrderStatus;
 import BackEnd.Form.ShoppingForms.OrderDetailForm.OrderDetailCreateForm;
@@ -10,7 +9,7 @@ import BackEnd.Form.ShoppingForms.OrderForm.OrderFilterForm;
 import BackEnd.Form.ShoppingForms.OrderStatusForms.OrderStatusCreateFormForFirstTime;
 import BackEnd.Repository.ShoppingRepositories.IOrderRepository;
 import BackEnd.Service.AccountServices.AccountService.IAccountService;
-import BackEnd.Service.AccountServices.AuthService.JWTUtils;
+import BackEnd.Configure.WebSecurity.JWTUtils;
 import BackEnd.Service.ShoppingServices.OrderDetailServices.IOrderDetailService;
 import BackEnd.Service.ShoppingServices.OrderStatusServices.IOrderStatusService;
 import BackEnd.Specification.ShoppingSpecifications.OrderSpecification;

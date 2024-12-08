@@ -57,20 +57,20 @@ public class WebSecutiryConfiguration {
 
                         // TODO: CÁC API LIÊN QUAN ĐẾN PRODUCT
                         // Các API `Brand`
-                        .requestMatchers(HttpMethod.GET, "/Brand/noPaging").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Brand").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Brand/{brandId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Brand").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/Brand").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.DELETE, "/Brand/{brandId}").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/Brand/noPaging")                             .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Brand")                                      .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Brand/{brandId}")                            .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Brand")                                     .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.PATCH, "/Brand")                                    .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.DELETE, "/Brand/{brandId}")                         .hasAnyAuthority("Manager")
 
                         // Các API `Category`
-                        .requestMatchers(HttpMethod.GET, "/Category/noPaging").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Category").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Category/{categoryId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Category").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/Category").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.DELETE, "/Category/{categoryId}").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/Category/noPaging")                          .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Category")                                   .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Category/{categoryId}")                      .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Category")                                  .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.PATCH, "/Category")                                 .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.DELETE, "/Category/{categoryId}")                   .hasAnyAuthority("Manager")
 
 
                         // Các API `Product`
@@ -89,22 +89,21 @@ public class WebSecutiryConfiguration {
 
                     // TODO: Các API liên quan đến `Account`
 
-                        .requestMatchers(HttpMethod.POST, "/Auth/SignIn").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Auth/LoginAdmin").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Auth/Registration").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Auth/Refresh").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Auth/ActiveUser").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Auth/SignIn")                               .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Auth/LoginAdmin")                           .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Auth/Registration")                         .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Auth/Refresh")                              .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Auth/ActiveUser")                            .permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/Account/isThisEmailExists").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Account").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Account/{accountId}").hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.GET, "/Account/isThisEmailExists")                  .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Account")                                    .hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/Account/{accountId}")                        .hasAnyAuthority("User", "Employee", "Manager", "Admin")
 
-                        .requestMatchers(HttpMethod.PATCH, "/Account/UpdateInformation")
-                        .hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/Account/ChangeStatus").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.PATCH, "/Account/UpdateInformation")                .hasAnyAuthority("User", "Employee", "Manager", "Admin")
+                        .requestMatchers(HttpMethod.PATCH, "/Account/ChangeStatus")                     .hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.PATCH, "/Account/ChangeRole")                       .hasAnyAuthority("Admin")
 
-                        .requestMatchers(HttpMethod.POST, "/UserInformation").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/UserInformation").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.PATCH, "/UserInformation")                          .hasAnyAuthority("Admin")
 
                         // TODO: Các API liên quan đến chức năng mua hàng
 

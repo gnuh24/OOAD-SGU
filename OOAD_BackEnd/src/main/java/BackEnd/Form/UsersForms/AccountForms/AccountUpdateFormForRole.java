@@ -1,5 +1,6 @@
 package BackEnd.Form.UsersForms.AccountForms;
 
+import BackEnd.Entity.AccountEntity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountUpdateFormForStatus {
+public class AccountUpdateFormForRole {
 
     private Integer accountId;
 
-    private Boolean status;
+    private Account.Role role;
 }

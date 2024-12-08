@@ -1,13 +1,10 @@
 package BackEnd.Controller.AccountController;
 
 
-import BackEnd.Configure.ErrorResponse.InvalidOldPassword;
-import BackEnd.Configure.ErrorResponse.InvalidToken;
-import BackEnd.Configure.ErrorResponse.TokenNotExists;
+import BackEnd.Configure.WebSecurity.JWTUtils;
 import BackEnd.Entity.AccountEntity.Account;
 import BackEnd.Form.UsersForms.AccountForms.*;
 import BackEnd.Service.AccountServices.AccountService.IAccountService;
-import BackEnd.Service.AccountServices.AuthService.JWTUtils;
 import BackEnd.Service.AccountServices.TokenServices.ITokenService;
 import BackEnd.Service.AccountServices.UserInformationService.IUserInformationService;
 import jakarta.validation.Valid;
@@ -19,7 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -83,6 +79,11 @@ public class AccountController {
     @PatchMapping(value = "/ChangeStatus")
     public AccountDTOForProfile updateStatusOfAccount(@ModelAttribute @Valid AccountUpdateFormForStatus form){
         return  modelMapper.map(accountService.updateStatusOfAccount(form), AccountDTOForProfile.class);
+    }
+
+    @PatchMapping(value = "/ChangeRole")
+    public AccountDTOForProfile updateRoleOfAccount(@ModelAttribute @Valid AccountUpdateFormForRole form){
+        return  modelMapper.map(accountService.updateRoleOfAccount(form), AccountDTOForProfile.class);
     }
 
 

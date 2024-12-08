@@ -26,10 +26,11 @@ public interface IAccountService extends UserDetailsService {
 
     Account createAccount(AccountCreateForm form) throws TheValueAlreadyExists;
 
-
     Account updateAccount(String token, AccountUpdateForm form);
 
     Account updateStatusOfAccount(AccountUpdateFormForStatus form);
+
+    Account updateRoleOfAccount(AccountUpdateFormForRole form);
 
     void deleteByAccountId(Integer accountId);
 

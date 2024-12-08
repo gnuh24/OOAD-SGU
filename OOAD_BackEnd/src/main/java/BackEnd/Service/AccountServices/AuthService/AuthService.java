@@ -1,7 +1,7 @@
 package BackEnd.Service.AccountServices.AuthService;
 
 import BackEnd.Configure.ErrorResponse.AuthException.*;
-import BackEnd.Configure.ErrorResponse.InvalidToken;
+import BackEnd.Configure.WebSecurity.JWTUtils;
 import BackEnd.Entity.AccountEntity.Account;
 import BackEnd.Form.AuthForm.LoginInfoDTO;
 import BackEnd.Form.AuthForm.LoginInputForm;
@@ -10,11 +10,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 
 
@@ -96,7 +93,7 @@ public class AuthService implements IAuthService{
             throw new InvalidCredentialsException("Email hoặc mật khẩu không đúng !!");
         }
 
-        if (!user.getRole().toString().equals("Admin")){
+        if (user.getRole().toString().equals("User")){
             throw new InvalidCredentialsException("Email hoặc mật khẩu không đúng !!");
         }
 

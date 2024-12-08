@@ -1,16 +1,13 @@
 package BackEnd.Service.AccountServices.AccountService;
 
-import BackEnd.Configure.ErrorResponse.InvalidOldPassword;
-import BackEnd.Configure.ErrorResponse.InvalidToken;
 import BackEnd.Configure.ErrorResponse.TheValueAlreadyExists;
-import BackEnd.Configure.ErrorResponse.TokenNotExists;
 import BackEnd.Entity.AccountEntity.Account;
 import BackEnd.Entity.AccountEntity.Token;
 import BackEnd.Entity.AccountEntity.UserInformation;
 import BackEnd.Event.SendingRegistrationTokenEvent;
 import BackEnd.Form.UsersForms.AccountForms.*;
 import BackEnd.Repository.AccountRepository.IAccountRepository;
-import BackEnd.Service.AccountServices.AuthService.JWTUtils;
+import BackEnd.Configure.WebSecurity.JWTUtils;
 import BackEnd.Service.AccountServices.TokenServices.ITokenService;
 import BackEnd.Service.AccountServices.UserInformationService.IUserInformationService;
 import BackEnd.Specification.AccountSpecifications.AccountSpecification;
@@ -121,6 +118,18 @@ public class AccountService implements IAccountService {
 
         if (form.getStatus() != null){
             account.setStatus(form.getStatus());
+        }
+
+        return repository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public Account updateRoleOfAccount(AccountUpdateFormForRole form) {
+        Account account = getAccountById(form.getAccountId());
+
+        if (form.getRole() != null){
+            account.setRole(form.getRole());
         }
 
         return repository.save(account);
