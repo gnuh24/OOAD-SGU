@@ -95,23 +95,22 @@ public class WebSecutiryConfiguration {
                         .requestMatchers(HttpMethod.GET, "/Account")                                    .hasAnyAuthority("Admin")
                         .requestMatchers(HttpMethod.GET, "/Account/{accountId}")                        .hasAnyAuthority("User", "Employee", "Manager", "Admin")
 
-                        .requestMatchers(HttpMethod.PATCH, "/Account/UpdateInformation")                .hasAnyAuthority("User", "Employee", "Manager", "Admin")
                         .requestMatchers(HttpMethod.PATCH, "/Account/ChangeStatus")                     .hasAnyAuthority("Admin")
                         .requestMatchers(HttpMethod.PATCH, "/Account/ChangeRole")                       .hasAnyAuthority("Admin")
 
-                        .requestMatchers(HttpMethod.PATCH, "/UserInformation")                          .hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.PATCH, "/Account/UpdateInformation")                .hasAnyAuthority("User", "Employee", "Manager", "Admin")
 
                         // TODO: Các API liên quan đến chức năng mua hàng
 
                         // Các API Giỏ hàng
-                        .requestMatchers(HttpMethod.GET, "/CartItem/{accountId}").hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.POST, "/CartItem").hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/CartItem").hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.DELETE, "/CartItem").hasAnyAuthority("User", "Admin")
-                    .requestMatchers(HttpMethod.DELETE, "/CartItem/{accountId}").hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.GET, "/CartItem/{accountId}")                       .hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.POST, "/CartItem")                                  .hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.PATCH, "/CartItem")                                 .hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.DELETE, "/CartItem")                                .hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.DELETE, "/CartItem/{accountId}")                    .hasAnyAuthority("User", "Admin")
 
                         // Các API Đơn hàng
-                        .requestMatchers(HttpMethod.GET, "/Order/Admin").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/Order/Admin")                        .hasAnyAuthority("Admin")
                         .requestMatchers(HttpMethod.GET, "/Order/Admin/{id}").hasAnyAuthority("Admin")
                         .requestMatchers(HttpMethod.GET, "/Order/MyOrder").hasAnyAuthority("User", "Admin")
                         .requestMatchers(HttpMethod.GET, "/Order/MyOrder/{id}").hasAnyAuthority("User", "Admin")
