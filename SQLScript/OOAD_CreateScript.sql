@@ -101,36 +101,36 @@ CREATE TABLE IF NOT EXISTS `CartItem` (
     FOREIGN KEY (`AccountId`)     REFERENCES `Account`(`Id`)
 );
 
--- DROP TABLE IF EXISTS `Order`;
--- CREATE TABLE IF NOT EXISTS `Order` (
---     `Id`                CHAR(12)           NOT NULL    PRIMARY KEY,
---     `OrderTime`         DATETIME           NOT NULL,
---     `TotalPrice`        INT UNSIGNED       NOT NULL,
---     `Note`              TEXT,		
---     `AccountId`         INT UNSIGNED,
---     FOREIGN KEY (`AccountId`) REFERENCES `Account` (`Id`)
--- );
+DROP TABLE IF EXISTS `Order`;
+CREATE TABLE IF NOT EXISTS `Order` (
+    `Id`                CHAR(12)           NOT NULL    PRIMARY KEY,
+    `OrderTime`         DATETIME           NOT NULL,
+    `TotalPrice`        INT UNSIGNED       NOT NULL,
+    `Note`              TEXT,		
+    `AccountId`         INT UNSIGNED,
+    FOREIGN KEY (`AccountId`) REFERENCES `Account` (`Id`)
+);
 
--- DROP TABLE IF EXISTS `OrderStatus`;
--- CREATE TABLE IF NOT EXISTS `OrderStatus` (
---     `OrderId`       CHAR(12)                                                        NOT NULL,
---     `Status`        ENUM("ChoDuyet", "DaDuyet", "DangGiao", "GiaoThanhCong", "Huy") NOT NULL,
---     `UpdateTime`    DATETIME                                                        NOT NULL,
---     PRIMARY KEY (`OrderId`, `Status`),
---     FOREIGN KEY (`OrderId`) REFERENCES `Order`(`Id`)
--- );
+DROP TABLE IF EXISTS `OrderStatus`;
+CREATE TABLE IF NOT EXISTS `OrderStatus` (
+    `OrderId`       CHAR(12)                                                        NOT NULL,
+    `Status`        ENUM("ChoDuyet", "DaDuyet", "DangGiao", "GiaoThanhCong", "Huy") NOT NULL,
+    `UpdateTime`    DATETIME                                                        NOT NULL,
+    PRIMARY KEY (`OrderId`, `Status`),
+    FOREIGN KEY (`OrderId`) REFERENCES `Order`(`Id`)
+);
 
--- DROP TABLE IF EXISTS `OrderDetail`;
--- CREATE TABLE IF NOT EXISTS `OrderDetail` (
---     `OrderId`       CHAR(12)           NOT NULL,
---     `ProductId`     INT UNSIGNED       NOT NULL,
---     `Quantity`      INT UNSIGNED       NOT NULL,
---     `UnitPrice`     INT UNSIGNED       NOT NULL,
---     `Total`         INT UNSIGNED       NOT NULL,
---     FOREIGN KEY (`OrderId`) REFERENCES `Order`(`Id`),
---     FOREIGN KEY (`ProductId`)     REFERENCES `Product`(`Id`),
---     PRIMARY KEY (`ProductId`, `OrderId`)
--- );
+DROP TABLE IF EXISTS `OrderDetail`;
+CREATE TABLE IF NOT EXISTS `OrderDetail` (
+    `OrderId`       CHAR(12)           NOT NULL,
+    `ProductId`     INT UNSIGNED       NOT NULL,
+    `Quantity`      INT UNSIGNED       NOT NULL,
+    `UnitPrice`     INT UNSIGNED       NOT NULL,
+    `Total`         INT UNSIGNED       NOT NULL,
+    FOREIGN KEY (`OrderId`) REFERENCES `Order`(`Id`),
+    FOREIGN KEY (`ProductId`)     REFERENCES `Product`(`Id`),
+    PRIMARY KEY (`ProductId`, `OrderId`)
+);
 
 
 -- /*______________________________________________________________________INVENTORY_________________________________________________________________________________________ */
