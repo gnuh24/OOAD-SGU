@@ -6,13 +6,13 @@ USE `SGU_OOAD`;
 /*________________________________________________________________________ TODO: Product tables_______________________________________________________________________ */
 DROP TABLE IF EXISTS `Category`;
 CREATE TABLE IF NOT EXISTS `Category`(
-    `Id`    INT UNSIGNED        PRIMARY KEY    AUTO_INCREMENT,
+    `Id`    		INT UNSIGNED        PRIMARY KEY    AUTO_INCREMENT,
     `CategoryName`  NVARCHAR(255)       NOT NULL
 );
 
 DROP TABLE IF EXISTS `Brand`;
 CREATE TABLE IF NOT EXISTS `Brand`(
-    `Id`       INT UNSIGNED        PRIMARY KEY    AUTO_INCREMENT,
+    `Id`       		INT UNSIGNED        PRIMARY KEY    AUTO_INCREMENT,
     `BrandName`     NVARCHAR(255)       NOT NULL
 );
 
@@ -87,19 +87,19 @@ CREATE TABLE IF NOT EXISTS `Account`(
 -- );
 
 
--- /*________________________________________________________________________ TODO: Order tables_______________________________________________________________________ */
--- DROP TABLE IF EXISTS `CartItem`;
--- CREATE TABLE IF NOT EXISTS `CartItem` (
---     `ProductId`         INT UNSIGNED       NOT NULL,
---     `AccountId`         INT UNSIGNED       NOT NULL,
---     `Quantity`          INT UNSIGNED       NOT NULL,
---     `UnitPrice`         INT UNSIGNED       NOT NULL,
---     `Total`             INT UNSIGNED       NOT NULL,
+/*________________________________________________________________________ TODO: Order tables_______________________________________________________________________ */
+DROP TABLE IF EXISTS `CartItem`;
+CREATE TABLE IF NOT EXISTS `CartItem` (
+    `ProductId`         INT UNSIGNED       NOT NULL,
+    `AccountId`         INT UNSIGNED       NOT NULL,
+    `Quantity`          INT UNSIGNED       NOT NULL,
+    `UnitPrice`         INT UNSIGNED       NOT NULL,
+    `Total`             INT UNSIGNED       NOT NULL,
 
---     PRIMARY KEY (`ProductId`, `AccountId`),
---     FOREIGN KEY (`ProductId`)     REFERENCES `Product`(`Id`),
---     FOREIGN KEY (`AccountId`)     REFERENCES `Account`(`Id`)
--- );
+    PRIMARY KEY (`ProductId`, `AccountId`),
+    FOREIGN KEY (`ProductId`)     REFERENCES `Product`(`Id`),
+    FOREIGN KEY (`AccountId`)     REFERENCES `Account`(`Id`)
+);
 
 -- DROP TABLE IF EXISTS `Order`;
 -- CREATE TABLE IF NOT EXISTS `Order` (
