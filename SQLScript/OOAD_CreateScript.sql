@@ -107,6 +107,7 @@ CREATE TABLE IF NOT EXISTS `Order` (
     `OrderTime`         DATETIME           NOT NULL,
     `TotalPrice`        INT UNSIGNED       NOT NULL,
     `Note`              TEXT,		
+    `Payment` 			ENUM("COD", "VNPAY"),
     `AccountId`         INT UNSIGNED,
     FOREIGN KEY (`AccountId`) REFERENCES `Account` (`Id`)
 );

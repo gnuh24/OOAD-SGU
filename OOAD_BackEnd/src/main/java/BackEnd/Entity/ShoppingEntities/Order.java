@@ -31,6 +31,10 @@ public class Order {
     @Column(name = "Note")
     private String note;
 
+    @Enumerated(EnumType.STRING) // Store the enum as a string in the database
+    @Column(name = "Payment", nullable = false)
+    private PaymentMethod payment;
+
     @ManyToOne
     @JoinColumn(name = "AccountId")
     private Account account;
@@ -41,5 +45,9 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
 
+    public enum PaymentMethod {
+        COD,   // Cash on Delivery
+        VNPAY; // VNPay Payment
+    }
 
 }

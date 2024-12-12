@@ -1,5 +1,6 @@
 package BackEnd.Form.ShoppingForms.OrderForm;
 
+import BackEnd.Entity.ShoppingEntities.Order;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

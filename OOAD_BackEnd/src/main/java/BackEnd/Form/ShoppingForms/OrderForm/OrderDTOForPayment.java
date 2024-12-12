@@ -1,22 +1,17 @@
 package BackEnd.Form.ShoppingForms.OrderForm;
 
-
 import BackEnd.Entity.ShoppingEntities.Order;
-import BackEnd.Form.ShoppingForms.OrderDetailForm.OrderDetailDTO;
-import BackEnd.Form.ShoppingForms.OrderStatusForms.OrderStatusDTO;
-import BackEnd.Form.UsersForms.UserInformationForms.UserInformationDTOForOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTODetailUser {
+public class OrderDTOForPayment {
 
     private String id;
 
@@ -27,12 +22,7 @@ public class OrderDTODetailUser {
 
     private Order.PaymentMethod payment;
 
+    private String url;
 
-    private String note;
-
-
-    private List<OrderStatusDTO> orderStatuses;
-
-    private List<OrderDetailDTO> orderDetails;
 
 }
