@@ -10,6 +10,7 @@ import BackEnd.Service.AccountServices.AccountService.IAccountService;
 import BackEnd.Service.AccountServices.UserInformationService.IUserInformationService;
 import BackEnd.Service.ShoppingServices.OrderServices.IOrderService;
 import BackEnd.Service.ShoppingServices.OrderStatusServices.IOrderStatusService;
+import BackEnd.Service.ShoppingServices.VnpayService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +46,9 @@ public class OrderController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private VnpayService vnpayService;
 
     @GetMapping(value = "/Admin")
     public Page<OrderDTOListAdmin> getAllOrderAdmin(Pageable pageable,
@@ -102,8 +107,8 @@ public class OrderController {
 
 
     @PostMapping(value = "/User")
-    public ResponseEntity<OrderDTO> createNewOrderByUser(@RequestHeader("Authorization") String token,
-                                                            @Valid @ModelAttribute OrderCreateFormForUser orderCreateDTO) throws VoucherExpiredException {
+    public ResponseEntity<OrderDTOForPayment> createNewOrderByUser(@RequestHeader("Authorization") String token,
+                                                            @Valid @ModelAttribute OrderCreateFormForUser orderCreateDTO) throws VoucherExpiredException, UnsupportedEncodingException {
 
 
         Account account = accountService.getAccountById(orderCreateDTO.getAccountId(), token);
@@ -112,7 +117,13 @@ public class OrderController {
         formForUser.setAccountId(account.getUserInformation().getId());
 
         Order savedOrder = orderService.createOrder(formForUser);
-        OrderDTO dto = modelMapper.map(savedOrder, OrderDTO.class);
+        OrderDTOForPayment dto = modelMapper.map(savedOrder, OrderDTOForPayment.class);
+
+        if (savedOrder.getPayment().toString().equals("VNPAY")){
+            String url = vnpayService.getPay(dto.getId(), Long.valueOf(dto.getTotalPrice()));
+            dto.setUrl(url);
+        }
+
         return ResponseEntity.ok(dto);
     }
 
