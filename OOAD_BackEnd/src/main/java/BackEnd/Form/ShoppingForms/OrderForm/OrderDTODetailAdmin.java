@@ -1,6 +1,7 @@
 package BackEnd.Form.ShoppingForms.OrderForm;
 
 
+import BackEnd.Entity.ShoppingEntities.Order;
 import BackEnd.Form.ShoppingForms.OrderDetailForm.OrderDetailDTO;
 import BackEnd.Form.ShoppingForms.OrderStatusForms.OrderStatusDTO;
 import BackEnd.Form.UsersForms.UserInformationForms.UserInformationDTOForOrder;
@@ -26,6 +27,8 @@ public class OrderDTODetailAdmin {
     private LocalDateTime orderTime;
 
     private String note;
+
+    private Order.PaymentMethod payment;
 
     @JsonProperty("userInformation")
     private UserInformationDTOForOrder accountUserInformation;

@@ -181,42 +181,38 @@ INSERT INTO `CartItem` (`ProductId`, `AccountId`, `Quantity`, `UnitPrice`, `Tota
 (30, 10, 3, 900, 2700);
 
 
-INSERT INTO `Order` (`Id`, 			`OrderTime`, 			`TotalPrice`, 	`Note`, 					`AccountId`) VALUES
-					('ORD00000001', '2024-07-01 08:30:00', 570000, 			'Urgent delivery', 						3),
-					('ORD00000002', '2024-07-01 09:00:00', 1710000, 		'Gift wrap the items', 					3),					
-					('ORD00000003', '2024-07-01 10:30:00', 3350000, 		'Include a thank you note', 			3),
-					('ORD00000004', '2024-07-01 11:00:00', 3600000, 		'Deliver before 6 PM', 					3),
-					('ORD00000005', '2024-07-02 08:00:00', 7260000, 		'Contact customer before delivery', 	3),
-					
-					('ORD00000006', '2024-07-02 09:30:00', 3080000, 		'Handle with care', 					3),
-					('ORD00000007', '2024-07-02 11:00:00', 1760000, 		'Leave at reception', 					3),
-					('ORD00000008', '2024-07-03 08:15:00', 1760000, 		'Include gift note', 					3),
-					('ORD00000009', '2024-07-03 10:00:00', 1870000, 		'Call before delivery', 				3),
-					('ORD00000010', '2024-07-03 11:30:00', 770000, 			'Pack items separately', 				3),
+INSERT INTO `Order` (`Id`, `OrderTime`, `TotalPrice`, `Note`, `Payment`, `AccountId`) VALUES
+('ORD00000001', '2024-07-01 08:30:00', 570000, 'Urgent delivery', 'COD', 3),
+('ORD00000002', '2024-07-01 09:00:00', 1710000, 'Gift wrap the items', 'VNPAY', 3),
+('ORD00000003', '2024-07-01 10:30:00', 3350000, 'Include a thank you note', 'COD', 3),
+('ORD00000004', '2024-07-01 11:00:00', 3600000, 'Deliver before 6 PM', 'VNPAY', 3),
+('ORD00000005', '2024-07-02 08:00:00', 7260000, 'Contact customer before delivery', 'COD', 3),
+('ORD00000006', '2024-07-02 09:30:00', 3080000, 'Handle with care', 'COD', 3),
+('ORD00000007', '2024-07-02 11:00:00', 1760000, 'Leave at reception', 'VNPAY', 3),
+('ORD00000008', '2024-07-03 08:15:00', 1760000, 'Include gift note', 'COD', 3),
+('ORD00000009', '2024-07-03 10:00:00', 1870000, 'Call before delivery', 'VNPAY', 3),
+('ORD00000010', '2024-07-03 11:30:00', 770000, 'Pack items separately', 'COD', 3),
+('ORD00000011', '2024-07-08 09:00:00', 1100000, 'Delivery after 5 PM.', 'VNPAY', 6),
+('ORD00000012', '2024-07-08 10:30:00', 1760000, 'Include a thank you note.', 'COD', 6),
+('ORD00000013', '2024-07-08 11:45:00', 1980000, 'Deliver to the address on file.', 'VNPAY', 7),
+('ORD00000014', '2024-07-09 08:30:00', 3300000, 'No rush delivery.', 'COD', 7),
+('ORD00000015', '2024-07-09 09:45:00', 4400000, 'Contact customer before delivery.', 'COD', 7),
+('ORD00000016', '2024-07-09 11:00:00', 390000, 'Gift wrap the items.', 'COD', 8),
+('ORD00000017', '2024-07-10 08:00:00', 1710000, 'Deliver before noon.', 'VNPAY', 8),
+('ORD00000018', '2024-07-10 09:30:00', 3350000, 'Leave at the office reception.', 'COD', 9),
+('ORD00000019', '2024-07-10 11:15:00', 3600000, 'Include a personalized message.', 'VNPAY', 10),
+('ORD00000020', '2024-07-11 09:00:00', 7260000, 'Check if the customer is home.', 'COD', 3),
+('ORD00000021', '2024-07-11 10:30:00', 570000, 'Gift item should be packed separately.', 'VNPAY', 3),
+('ORD00000022', '2024-07-11 11:45:00', 1710000, 'Deliver after 6 PM.', 'COD', 2),
+('ORD00000023', '2024-07-12 08:30:00', 3350000, 'Include a thank you note.', 'COD', 6),
+('ORD00000024', '2024-07-12 09:45:00', 3600000, 'Call before delivery.', 'VNPAY', 9),
+('ORD00000025', '2024-07-12 11:00:00', 7260000, 'Deliver to the alternate address.', 'COD', 3),
+('ORD00000026', '2024-07-13 08:00:00', 3080000, 'Ensure timely delivery.', 'COD', 2),
+('ORD00000027', '2024-07-13 09:30:00', 1760000, 'No special instructions.', 'VNPAY', 3),
+('ORD00000028', '2024-07-13 11:15:00', 1760000, 'Contact customer to confirm delivery.', 'COD', 1),
+('ORD00000029', '2024-07-14 08:00:00', 1870000, 'Deliver before noon.', 'VNPAY', 2),
+('ORD00000030', '2024-07-14 09:30:00', 770000, 'Pack items carefully.', 'COD', 3);
 
-					('ORD00000011', '2024-07-08 09:00:00', 1100000, 		'Delivery after 5 PM.', 				6),
-					('ORD00000012', '2024-07-08 10:30:00', 1760000, 		'Include a thank you note.', 			6),
-					('ORD00000013', '2024-07-08 11:45:00', 1980000, 		'Deliver to the address on file.', 		7),
-					('ORD00000014', '2024-07-09 08:30:00', 3300000, 		'No rush delivery.', 					7),
-					('ORD00000015', '2024-07-09 09:45:00', 4400000, 		'Contact customer before delivery.', 	7),
-					
-					('ORD00000016', '2024-07-09 11:00:00', 390000, 			'Gift wrap the items.', 				8),
-					('ORD00000017', '2024-07-10 08:00:00', 1710000,			'Deliver before noon.', 				8),
-					('ORD00000018', '2024-07-10 09:30:00', 3350000, 		'Leave at the office reception.', 		9),
-					('ORD00000019', '2024-07-10 11:15:00', 3600000, 		'Include a personalized message.', 		10),
-					('ORD00000020', '2024-07-11 09:00:00', 7260000, 		'Check if the customer is home.', 		3),
-
-					('ORD00000021', '2024-07-11 10:30:00', 570000, 		'Gift item should be packed separately.', 	3),
-					('ORD00000022', '2024-07-11 11:45:00', 1710000, 		'Deliver after 6 PM.', 						2),
-					('ORD00000023', '2024-07-12 08:30:00', 3350000, 			'Include a thank you note.', 				6),
-					('ORD00000024', '2024-07-12 09:45:00', 3600000, 		'Call before delivery.',					9),
-					('ORD00000025', '2024-07-12 11:00:00', 7260000, 		'Deliver to the alternate address.', 		3),
-					
-					('ORD00000026', '2024-07-13 08:00:00', 3080000, 		'Ensure timely delivery.', 					2),
-					('ORD00000027', '2024-07-13 09:30:00', 1760000, 		'No special instructions.', 				3),
-					('ORD00000028', '2024-07-13 11:15:00', 1760000, 		'Contact customer to confirm delivery.', 	1),
-					('ORD00000029', '2024-07-14 08:00:00', 1870000, 		'Deliver before noon.', 					2),
-					('ORD00000030', '2024-07-14 09:30:00', 770000, 		'Pack items carefully.', 					3);
 
 
 INSERT INTO `OrderStatus` 		(`OrderId`, 	`Status`, 			`UpdateTime`) VALUES
