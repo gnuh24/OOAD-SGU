@@ -60,10 +60,7 @@
                                         <label for='paymentVNPAY'>VNPAY</label>
                                     </div>
                                 </div>
-                                <div class='voucher__wrapper'>
-                                    <label for='voucher'>Khuyến mãi: </label>
 
-                                </div>
 
 
 
@@ -142,7 +139,7 @@
                 <div class='radio__wrapper'>
                     <div>
                         <div class='cartItem' id='${cartProduct.idProductId}'>
-                            <a href='#' class='img'><img class='img' src='../img/${cartProduct.image}' /></a>
+                            <a href='#' class='img'><img class='img' src='https://res.cloudinary.com/djhoea2bo/image/upload/v1711511636/${cartProduct.image}' /></a>
                             <div class='inforCart'>
                                 <div class='nameAndPrice'>
                                     <p class='priceCart'>${formatCurrency(cartProduct.unitPrice)}</p>
@@ -166,54 +163,9 @@
         $('#totalPrice').text(formatCurrency(totalPrice));
         totalpriceall = totalPrice;
         totalpriceOrigin = totalPrice
-        renderVoucher(totalpriceall);
     }
 
-    function renderVoucher(totalpriceall) {
-        $.ajax({
-            url: "../../Controllers/VoucherController.php",
-            method: "GET",
-            data: {
-                condition: totalpriceall
-            },
-            dataType: "json",
-            success: function(response) {
-                let voucherContent = ""; // Khởi tạo nội dung voucher
 
-                response.data.forEach(voucher => {
-                    voucherContent += `
-                <div class="voucher__item">
-                    <input type="radio" name="voucher" id="voucher_${voucher.Id}" value="${voucher.Id}">
-                    <label for="voucher_${voucher.Id}">
-                        ${voucher.Code} - Giảm ${voucher.SaleAmount} (Áp dụng cho đơn từ ${voucher.Condition}đ)
-                    </label>
-                </div>
-                `;
-                });
-
-                // Hiển thị các voucher vào div.payment__wrapper
-                $(".voucher__wrapper").html(`
-                <label for="voucher">Khuyến mãi:</label>
-                ${voucherContent}
-            `);
-
-                // Gán sự kiện change sau khi nội dung đã được thêm vào DOM
-                document.querySelectorAll('input[name="voucher"]').forEach(radio => {
-                    radio.addEventListener('change', function() {
-                        const selectedVoucherId = this.value;
-                        // Tìm voucher đã chọn và lấy SaleAmount
-                        const selectedVoucher = response.data.find(v => v.Id == selectedVoucherId);
-                        if (selectedVoucher) {
-                            updateTotalPrice(selectedVoucher.SaleAmount);
-                        }
-                    });
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("Error:", error);
-            }
-        });
-    }
 
     function updateTotalPrice(saleAmount) {
         totalpriceall = totalpriceOrigin - saleAmount < 0 ? 0 : totalpriceOrigin - saleAmount;

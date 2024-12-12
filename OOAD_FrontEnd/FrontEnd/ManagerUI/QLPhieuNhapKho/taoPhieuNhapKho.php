@@ -255,23 +255,26 @@
             });
             return false;
         }
-
         const token = sessionStorage.getItem("token");
-        var inventoryReportDetailCreateFormList = productData.map(product => ({
-            idProductId: product.idProductId,
-            productName: product.productName,
-            unitPrice: product.unitPrice,
-            total: product.total,
-            profit: product.profit
-        }));
-        // Tạo đối tượng dữ liệu để gửi
-        var dataToSend = {
-            totalPrice: totalValue,
-            supplier: maNhaCungCap,
-            supplierPhone: sodienthoainhacungcap,
-            inventoryReportDetailCreateFormList: inventoryReportDetailCreateFormList
 
-        };
+        var formData = new FormData();
+
+        // Thêm các trường thông tin chung vào FormData
+        formData.append("totalPrice", totalValue);
+        formData.append("supplier", maNhaCungCap);
+        formData.append("supplierPhone", sodienthoainhacungcap);
+
+        // Duyệt qua productData và thêm từng sản phẩm vào FormData
+        productData.forEach((product, index) => {
+            formData.append(`inventoryReportDetailCreateFormList[${index}].idProductId`, product.idProductId || "");
+            formData.append(`inventoryReportDetailCreateFormList[${index}].productName`, product.productName || "");
+            formData.append(`inventoryReportDetailCreateFormList[${index}].quantity`, parseInt(product.quantity) || 0);
+            formData.append(`inventoryReportDetailCreateFormList[${index}].unitPrice`, parseFloat(product.unitPrice) || 0);
+            formData.append(`inventoryReportDetailCreateFormList[${index}].total`, parseFloat(product.total) || 0);
+            formData.append(`inventoryReportDetailCreateFormList[${index}].profit`, parseFloat(product.profit) || 0);
+        });
+        // Tạo đối tượng dữ liệu để gửi
+
 
         // Kiểm tra giá trị totalPrice
         var totalPrice = parseInt(totalValue);
@@ -283,12 +286,11 @@
         $.ajax({
             type: 'POST', // Sử dụng PATCH thay vì POST
             url: 'http://localhost:8080/InventoryReport', // Cập nhật URL nếu cần
-            contentType: 'application/json', // Thiết lập kiểu nội dung là JSON
-            data: dataToSend, // Chuyển đối tượng thành chuỗi JSON
+            processData: false, // Không xử lý dữ liệu, để FormData tự xử lý
+            contentType: false, // Tắt tự động gán content type
+            data: formData, // Gửi FormData
             headers: {
                 'Authorization': 'Bearer ' + token,
-                "Content-Type": "application/x-www-form-urlencoded",
-
             },
             success: function(response) {
                 Swal.fire({

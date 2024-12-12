@@ -39,7 +39,7 @@
                                 <div class="wrapper">
                                     <div style="">
                                         <h2>Quản lý sản Phẩm</h2>
-                                        <!-- <button id="createProductBtn" onclick="toCreateForm()">Tạo Sản Phẩm</button> -->
+                                        <button id="createProductBtn" onclick="toCreateForm()">Tạo Sản Phẩm</button>
                                     </div>
                                     <!-- Thanh lọc menu -->
                                     <div id="filter-menu">

@@ -30,7 +30,6 @@
                 <input type="email" placeholder="Tên đăng nhập" id="tenDangNhapLogin" />
                 <input type="password" placeholder="Password" id="passwordLogin" />
                 <button type="button" class="btn btn-danger" id="signInButton">Đăng nhập</button>
-                <button type="button" class="btn btn-link" id="forgotPasswordButton">Quên mật khẩu?</button>
 
             </form>
         </div>
@@ -51,24 +50,7 @@
         </div>
     </div>
 
-    <!-- Modal Quên Mật Khẩu -->
-    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="forgotPasswordModalLabel">Quên Mật Khẩu</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="email" placeholder="Nhập email của bạn" id="forgotEmail" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="sendEmailButton">Gửi</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </body>
 
 
@@ -84,8 +66,6 @@
     const container = document.getElementById("container");
     const registerBtn = document.getElementById("register");
     const loginBtn = document.getElementById("login");
-    const forgotPasswordBtn = document.getElementById("forgotPasswordButton");
-    const sendEmailButton = document.getElementById("sendEmailButton");
 
     registerBtn.addEventListener("click", () => {
         container.classList.add("active");
@@ -94,10 +74,7 @@
     loginBtn.addEventListener("click", () => {
         container.classList.remove("active");
     });
-    forgotPasswordBtn.addEventListener("click", (event) => {
-        event.preventDefault(); // Ngăn chặn sự chuyển đổi
-        $('#forgotPasswordModal').modal('show');
-    });
+
 
 
     const signUpButton = document.getElementById("signUpButton");
@@ -336,57 +313,15 @@
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Lỗi:', error);
                 Swal.fire({
                     title: 'Lỗi!',
-                    text: 'Đã xảy ra lỗi khi kiểm tra tài khoản!',
+                    text: xhr.responseJSON.detailMessage,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
             }
         });
     }
-
-    sendEmailButton.addEventListener("click", async (event) => {
-        event.preventDefault(); // Ngăn chặn hành động mặc định
-
-        const email = document.getElementById("forgotEmail").value;
-        if (isValidEmail(email)) {
-            // Gửi yêu cầu đến server để reset mật khẩu
-            $.ajax({
-                url: '../../../Controllers/AccountController.php',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    email: email,
-                    action: 'resetPassword'
-                },
-                success: function(response) {
-                    Swal.fire({
-                        title: response.message,
-                        icon: response.status === 200 ? 'success' : 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    $('#forgotPasswordModal').modal('hide');
-                },
-                error: function() {
-                    Swal.fire({
-                        title: 'Lỗi!',
-                        text: 'Đã xảy ra lỗi khi gửi yêu cầu!',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            });
-        } else {
-            Swal.fire({
-                title: 'Lỗi!',
-                text: 'Email không hợp lệ!',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    });
 </script>
 
 
