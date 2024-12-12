@@ -123,16 +123,15 @@ public class WebSecutiryConfiguration {
 
 
                         // TODO: API liên quan đến Inventory (nhập kho)
-                        .requestMatchers(HttpMethod.GET, "/InventoryReport").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/InventoryReport/{id}").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.POST, "/InventoryReport").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/InventoryReport").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/InventoryReport")                            .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.GET, "/InventoryReport/{id}")                       .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.POST, "/InventoryReport")                           .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.PATCH, "/InventoryReport")                          .hasAnyAuthority("Manager")
 
                         // TODO: API Thống kê
-                        .requestMatchers(HttpMethod.GET, "/Statistic/BestSeller").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Statistic/OrderStatus").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Statistic/BestSellerBySize").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Statistic/IncomeSummary").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/Statistic/BestSeller")                       .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.GET, "/Statistic/OrderStatus")                      .hasAnyAuthority("Manager")
+                        .requestMatchers(HttpMethod.GET, "/Statistic/IncomeSummary")                    .hasAnyAuthority("Manager")
 
 
                     // Xác thực tất cả các request

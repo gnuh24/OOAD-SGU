@@ -61,12 +61,6 @@ public class InventoryReportService implements IInventoryReportService {
         inventoryReport = inventoryReportRepository.save(inventoryReport);
         for(InventoryReportDetailCreateFormForFirstTime detailForm: form.getInventoryReportDetailCreateFormList()){
 
-//            if (detailForm.getIdProductId() == null){
-//                ProductCreateForm productCreateForm = new ProductCreateForm(detailForm.getProductName());
-//                Product newProduct = productService.createProduct(productCreateForm);
-//                detailForm.setIdProductId(newProduct.getId());
-//            }
-
             InventoryReportDetailCreateForm detailCreateForm = modelMapper.map(detailForm, InventoryReportDetailCreateForm.class);
             detailCreateForm.setIdInventoryReportId(inventoryReport.getId());
             inventoryReportDetailService.createInventoryReportDetail(detailCreateForm);
@@ -80,7 +74,7 @@ public class InventoryReportService implements IInventoryReportService {
             batchCreateForm.setUnitPrice(detailCreateForm.getUnitPrice() * (100 + detailCreateForm.getProfit()) / 100);
             System.err.println("UnitPrice A: " + batchCreateForm.getUnitPrice());
 
-            Batch batch = batchService.createBatch(batchCreateForm);
+            batchService.createBatch(batchCreateForm);
         }
 
         return inventoryReport;
