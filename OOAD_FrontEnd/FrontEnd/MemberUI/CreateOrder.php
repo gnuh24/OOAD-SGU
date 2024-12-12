@@ -165,14 +165,6 @@
         totalpriceOrigin = totalPrice
     }
 
-
-
-    function updateTotalPrice(saleAmount) {
-        totalpriceall = totalpriceOrigin - saleAmount < 0 ? 0 : totalpriceOrigin - saleAmount;
-        // Cập nhật hiển thị giá đã giảm trên giao diện
-        document.querySelector('#totalPrice').textContent = ` ${formatCurrency(totalpriceall)}`;
-    }
-
     document.getElementById('address').addEventListener('input', function() {
         fillOrderInfo();
     });
@@ -189,21 +181,21 @@
     function loadUserInfoFromsessionStorage() {
         var userData = sessionStorage.getItem("id");
         $.ajax({
-            url: "../../Controllers/UserInformationController.php",
+            url: "http://localhost:8080/Account/" + userData,
             method: "GET",
-            data: {
-                Id: userData
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
             },
             dataType: "json",
             success: function(response) {
-                document.getElementById('spanHoTen').textContent = response.data.Fullname;
-                document.getElementById('spanSoDienThoai').textContent = response.data.PhoneNumber;
-                document.getElementById('spanDiaChi1').textContent = response.data.Address;
+                document.getElementById('spanHoTen').textContent = response.fullname;
+                document.getElementById('spanSoDienThoai').textContent = response.phoneNumber;
+                document.getElementById('spanDiaChi1').textContent = response.address;
 
-                document.getElementById('username').value = response.data.Fullname;
-                document.getElementById('address1').value = response.data.Address;
+                document.getElementById('username').value = response.fullname;
+                document.getElementById('address1').value = response.address;
 
-                document.getElementById('phonenumber').value = response.data.PhoneNumber;
+                document.getElementById('phonenumber').value = response.phoneNumber;
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -261,17 +253,23 @@
     function updateInfor() {
         const maTaiKhoan = sessionStorage.getItem("id");
         const formData = {
-            accountId: maTaiKhoan,
-            fullname: document.getElementById('username').value,
-            phone: document.getElementById('phonenumber').value,
-            address: document.getElementById('address1').value
+
         };
 
         $.ajax({
-            url: "../../Controllers/UserInformationController.php",
+            url: "http://localhost:8080/Account/UpdateInformation",
             method: "PATCH",
-            data: JSON.stringify(formData),
-            contentType: "application/json",
+            data: {
+                accountId: maTaiKhoan,
+                fullname: document.getElementById('username').value,
+                phone: document.getElementById('phonenumber').value,
+                address: document.getElementById('address1').value
+            },
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                "Content-Type": "application/x-www-form-urlencoded",
+
+            },
             success: function(response) {},
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -297,10 +295,10 @@
         formData.append('Payment', selectedPaymentMethod)
         if (Array.isArray(listproduct)) {
             listproduct.forEach((item, index) => {
-                formData.append(`listOrderDetail[${index}][productId]`, item.productId);
-                formData.append(`listOrderDetail[${index}][unitPrice]`, item.unitPrice);
-                formData.append(`listOrderDetail[${index}][quantity]`, item.quantity);
-                formData.append(`listOrderDetail[${index}][total]`, item.total);
+                formData.append(`listOrderDetail[${index}].productId`, item.productId);
+                formData.append(`listOrderDetail[${index}].unitPrice`, item.unitPrice);
+                formData.append(`listOrderDetail[${index}].quantity`, item.quantity);
+                formData.append(`listOrderDetail[${index}].total`, item.total);
             });
         } else {
             console.error("Dữ liệu giỏ hàng không hợp lệ");
@@ -321,11 +319,15 @@
             thanhToanVNPay(orderId, totalpriceall);
         } else {
             $.ajax({
-                url: "../../Controllers/OrderController.php",
+                url: "http://localhost:8080/Order/User",
                 method: "POST",
                 data: formData,
                 processData: false, // Ngăn jQuery xử lý dữ liệu
                 contentType: false, // Ngăn jQuery thiết lập tiêu đề `Content-Type`
+
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
+                },
                 success: function(response) {
                     Swal.fire({
                         title: 'Đặt hàng thành công!',

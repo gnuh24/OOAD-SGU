@@ -53,10 +53,10 @@
         });
 
         $.ajax({
-            url: '../../Controllers/OrderController.php', // Đường dẫn API lấy đơn hàng
+            url: 'http://localhost:8080/Order/MyOrder', // Đường dẫn API lấy đơn hàng
             type: 'GET',
-            data: {
-                accountId: customerId
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
             },
             dataType: 'json', // Đảm bảo rằng response được xử lý là JSON
             success: function(response) {
@@ -64,9 +64,8 @@
                 Swal.close();
 
                 // Kiểm tra kiểu dữ liệu của response
-                if (response.data && Array.isArray(response.data)) {
-                    const orders = response.data;
-
+                if (response && Array.isArray(response)) {
+                    const orders = response;
                     if (orders.length <= 0) {
                         $('#emptyCartMessage').show(); // Hiện thông báo nếu không có đơn hàng
                     } else {
@@ -112,23 +111,23 @@
 
             // Fetch order details for each order (make sure to use hoaDon.Id, not hoaDon.id)
             $.ajax({
-                url: '../../Controllers/OrderController.php', // Đường dẫn API lấy chi tiết đơn hàng
+                url: 'http://localhost:8080/Order/MyOrder/' + hoaDon.id, // Đường dẫn API lấy chi tiết đơn hàng
                 type: 'GET',
-                data: {
-                    id: hoaDon.OrderId // Use 'Id' based on your response structure
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
                 },
                 async: false, // Synchronous requests are generally not recommended
                 dataType: 'json', // Ensure the response is parsed as JSON
                 success: function(chiTietDonHangResponse) {
-                    const listCTDH = chiTietDonHangResponse.data.details;
+                    const listCTDH = chiTietDonHangResponse.orderDetails;
                     listCTDH.forEach(chiTiet => {
                         orderHtml += `
                         <tr class='orderManagement_order_detail'>
-                            <td class='anhMinhHoa'><img style='width: auto; height: 100px;' src='../img/${chiTiet.Image}'></td>
-                            <td class='tenSanPham'>${chiTiet.ProductName}</td>
-                            <td class='donGia'>${formatCurrency(chiTiet.UnitPrice)}</td>
-                            <td class='soLuong'>${chiTiet.Quantity}</td>
-                            <td class='thanhTien'>${formatCurrency(chiTiet.Total)}</td>
+                            <td class='anhMinhHoa'><img style='width: auto; height: 100px;' src='https://res.cloudinary.com/djhoea2bo/image/upload/v1711511636/${chiTiet.image}'></td>
+                            <td class='tenSanPham'>${chiTiet.productName}</td>
+                            <td class='donGia'>${formatCurrency(chiTiet.unitPrice)}</td>
+                            <td class='soLuong'>${chiTiet.quantity}</td>
+                            <td class='thanhTien'>${formatCurrency(chiTiet.total)}</td>
                         </tr>`;
                     });
                 },
@@ -142,12 +141,12 @@
                         </tbody>
                     </table>
                     <div class='orderManagement_order_thanhTien'>
-                        <p style="width: 50%;">Trạng thái: ${fromEnumStatusToText(hoaDon.Status)}</p>
-                        <p>Tổng giá trị: ${formatCurrency(hoaDon.TotalPrice)}</p>
-                        <button class='order_detail_button' onclick="toOrderDetail('${hoaDon.OrderId}')"> Chi tiết</button>`;
+                        <p style="width: 50%;">Trạng thái: ${fromEnumStatusToText(hoaDon.status)}</p>
+                        <p>Tổng giá trị: ${formatCurrency(hoaDon.totalPrice)}</p>
+                        <button class='order_detail_button' onclick="toOrderDetail('${hoaDon.id}')"> Chi tiết</button>`;
 
-            if (hoaDon.Status !== 'DangGiao' && hoaDon.Status !== 'GiaoThanhCong' && hoaDon.Status !== 'Huy' && hoaDon.Status !== 'DaDuyet') {
-                orderHtml += `<button class='cancel_order_button' onclick="cancelOrder('${hoaDon.OrderId}')">Hủy đơn hàng</button>`;
+            if (hoaDon.status !== 'DangGiao' && hoaDon.status !== 'GiaoThanhCong' && hoaDon.status !== 'Huy' && hoaDon.status !== 'DaDuyet') {
+                orderHtml += `<button class='cancel_order_button' onclick="cancelOrder('${hoaDon.id}')">Hủy đơn hàng</button>`;
             }
 
             orderHtml += `</div></div>`;

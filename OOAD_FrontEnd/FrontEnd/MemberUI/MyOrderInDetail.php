@@ -210,36 +210,35 @@
 
     function loadOrderData(maOrder) {
         $.ajax({
-            url: '../../Controllers/OrderController.php', // Đường dẫn API lấy chi tiết đơn hàng
+            url: 'http://localhost:8080/Order/MyOrder/' + maOrder, // Đường dẫn API lấy chi tiết đơn hàng
             method: 'GET',
             dataType: 'json',
-            data: {
-                idOrder: maOrder // Use 'Id' based on your response structure
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
             },
             success: function(response) {
-                console.log(response.data);
                 let totalPrice_Shipping = 0;
                 let productListHtml = '';
                 let html = '';
                 // Xử lý từng sản phẩm trong kết quả trả về
-                response.data.details.forEach(function(cartProduct) {
+                response.orderDetails.forEach(function(cartProduct) {
                     totalPrice_Shipping += cartProduct.Total;
-                    const formattedPrice = formatCurrency(cartProduct.UnitPrice);
-                    const formattedTotalPrice = formatCurrency(cartProduct.Total);
+                    const formattedPrice = formatCurrency(cartProduct.unitPrice);
+                    const formattedTotalPrice = formatCurrency(cartProduct.total);
 
                     // Thêm sản phẩm vào danh sách HTML
                     productListHtml += `
                                             <div class='radio__wrapper'>
                                                 <div>
-                                                    <div class='cartItem' id='${cartProduct.ProductId}'>
-                                                        <a href='#' class='img'><img class='img' src='../img/${cartProduct.Image}' /></a>
+                                                    <div class='cartItem' id='${cartProduct.productId}'>
+                                                        <a href='#' class='img'><img class='img' src='https://res.cloudinary.com/djhoea2bo/image/upload/v1711511636/${cartProduct.Image}' /></a>
                                                         <div class='inforCart'>
                                                             <div class='nameAndPrice'>
-                                                                <a href='#' class='nameCart'>${cartProduct.ProductName}</a>
+                                                                <a href='#' class='nameCart'>${cartProduct.productName}</a>
                                                                 <p class='priceCart'>${formattedPrice}</p>
                                                             </div>
                                                             <div class='quantity'>
-                                                                <div class='txtQuantity'>${cartProduct.Quantity}</div>
+                                                                <div class='txtQuantity'>${cartProduct.quantity}</div>
                                                             </div>
                                                         </div>
                                                         <div class='wrapTotalPriceOfCart'>
@@ -257,11 +256,10 @@
                 html = `
                         <div class="container mt-4">
                             <div class="info__wrapper order_info2">
-                                <p><span class="span1">Mã đơn hàng:</span><span class="span2" id="id">${response.data.info.OrderId}</span></p>
-                                <p><span class="span1">Thời gian đặt hàng:</span><span class="span2" id="orderTime">${convertDateTimeFormat(response.data.info.OrderTime)}</span></p>
-                                <p><span class="span1">Ghi chú:</span><span class="span2" id="note">${response.data.info.Note==null?'':response.data.info.Note}</span></p>
-                                <p><span class="span1">Tình trạng:</span><span class="span2" id="note">${response.data.info.isPaid==0?'Chưa thanh toán':'Đã thanh toán'}</span></p>
-                                <p><span class="span1">Phương thức thanh toán:</span><span class="span2" id="note">${response.data.info.Payment}</span></p>
+                                <p><span class="span1">Mã đơn hàng:</span><span class="span2" id="id">${response.id}</span></p>
+                                <p><span class="span1">Thời gian đặt hàng:</span><span class="span2" id="orderTime">${convertDateTimeFormat(response.orderTime)}</span></p>
+                                <p><span class="span1">Ghi chú:</span><span class="span2" id="note">${response.note==null?'':response.note}</span></p>
+                                <p><span class="span1">Phương thức thanh toán:</span><span class="span2" id="note">${response.Payment}</span></p>
 
                             </div>
 
