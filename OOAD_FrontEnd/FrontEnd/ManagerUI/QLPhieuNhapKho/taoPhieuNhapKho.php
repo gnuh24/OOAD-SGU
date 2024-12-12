@@ -54,8 +54,7 @@
                                     placeholder="Nhập số điện thoại nhà cung cấp"
                                     style="width: 35%;padding: 10px 0;" />
                                 <?php if (!isset($_GET['MaPhieu'])) echo '
-                                <button style="margin-left: 1rem; font-family: Arial; font-size: 1.5rem; font-weight: 700; color: white; background-color: rgb(65, 64, 64); padding: 1rem; border-radius: 0.6rem; cursor: pointer;" onclick="setShowModal1(true)">
-                                    Tạo sản phẩm mới</button>
+                                
                                 <button style="margin-left: 1rem; font-family: Arial; font-size: 1.5rem; font-weight: 700; color: white; background-color: rgb(65, 64, 64); padding: 1rem; border-radius: 0.6rem; cursor: pointer;" onclick="handleSubmit()">
                                     Tạo phiếu nhập</button>';
                                 ?>
@@ -137,37 +136,7 @@
                                             echo 'display:none';
                                         };
                                         ?>">
-        <div class="modal_content">
-            <!-- Đầu modal_content -->
-            <span class="close_btn">
-                <h3>Tạo mới Sản Phẩm</h3>
-                <i onclick="setShowModal1(false)">X</i>
-            </span>
-            <div style="margin-top: 1rem;">
-                <div class="table_wrapper">
-                    <table class="product_table">
-                        <thead>
-                            <tr style="background-color: rgb(40, 40, 40); color: white;">
-                                <th style="padding: 0.5rem;width: 477px;">Tên Sản Phẩm</th>
-                            </tr>
-                        </thead>
-                    </table>
 
-                    <div class="input-container">
-                        <label for="sanPhamMoi" style="display: block; margin-bottom: 0.5rem;">Nhập tên sản phẩm mới:</label>
-                        <input type="text" id="sanPhamMoi" class="input-text" placeholder="Nhập tên sản phẩm mới">
-                    </div>
-
-                    <div class="button-container">
-                        <button class="create-product-button" onclick="handleNew()">
-                            Tạo sản phẩm mới
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
     </div>
 </body>
 
@@ -211,70 +180,6 @@
         // Gọi ngay tính tổng sau khi thêm sản phẩm vào bảng
         calculateTotalPrice(); // Tính toán lại tổng giá trị ngay sau khi thêm sản phẩm
     });
-
-    function handleNew() {
-        var inputElement = document.getElementById('sanPhamMoi');
-        var inputValue = inputElement.value.trim();
-
-        if (inputValue === '') {
-            alert('Vui lòng nhập tên sản phẩm.');
-            return;
-        }
-
-        // Tạo đối tượng sản phẩm mới
-        var newProduct = {
-            id: 'new-' + Date.now(), // Cấp ID tạm thời duy nhất
-            name: inputValue,
-            donGia: '1',
-            soLuong: '1',
-            loiNhuan: '1'
-        };
-
-        // Lấy danh sách sản phẩm hiện tại từ localStorage
-        var selectedProducts = JSON.parse(localStorage.getItem('selectedProducts')) || [];
-
-        // Thêm sản phẩm mới vào danh sách
-        selectedProducts.push(newProduct);
-
-        // Lưu danh sách sản phẩm đã cập nhật vào localStorage
-        localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
-
-        // Xóa nội dung bảng hiện tại
-        $('#tableBody').empty();
-
-        // Thêm sản phẩm mới vào bảng
-        selectedProducts.forEach(function(product, index) {
-            var selectedProductHTML = `
-            <tr style="text-align: center;" data-product-id="${product.id}">
-                <td style="padding: 0.5rem;" name="MaSanPham[]">${!isNewProduct(product.id) ? product.id : ''}</td>
-                <td style="padding: 0.5rem;">${product.name}</td>
-                <td style="padding: 0.5rem;">
-                    <input type="text" name="donGia[]" id="donGia${product.id}" onblur="formatCurrency(this)" onfocus="clearFormat(this)" value="${product.donGia}" style="height: 3rem; padding: 0.5rem; width: 100%; background-color: white; font-weight: 700; margin-top: 0.5rem;text-align: right;">
-                </td>
-                <td style="padding: 0.5rem;">
-                    <input type="text" name="soLuong[]" id="soLuong${product.id}" value="${product.soLuong}" onblur="validateSoLuong(this)" style="height: 3rem; padding: 0.5rem; width: 100%; background-color: white; font-weight: 700; margin-top: 0.5rem;text-align: right;">
-                </td>
-                <td style="padding: 0.5rem;">
-                    <input type="text" name="loiNhuan[]" id="loiNhuan${product.id}" value="${product.loiNhuan}" onblur="validateSoLuong(this)" style="height: 3rem; padding: 0.5rem; width: 100%; background-color: white; font-weight: 700; margin-top: 0.5rem;text-align: right;">
-                </td>
-                <td style="padding: 0.5rem;">
-                    <button class="delete-btn" data-index="${index}" style="color: red; font-weight: 700; background: none; border: none; cursor: pointer;">X</button>
-                </td>
-            </tr>`;
-            $('#tableBody').append(selectedProductHTML);
-        });
-
-        // Gọi ngay tính tổng sau khi thêm sản phẩm vào bảng
-        calculateTotalPrice();
-
-        // Xóa giá trị của input và ẩn modal
-        inputElement.value = '';
-        var modal = document.querySelector('.modal_overlay1');
-        if (modal) {
-            modal.style.display = 'none';
-        }
-        saveSelectedProducts();
-    }
 
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -330,20 +235,13 @@
             var loiNhuan = $(this).find('td:nth-child(5) input').val().trim();
 
             var productItem = {
+                idProductId: maSanPham || null, // Nếu không có mã sản phẩm, để null
                 productName: tenSanPham,
-                unitPrice: donGia,
-                quantity: soLuong,
-                profit: loiNhuan
+                unitPrice: parseFloat(donGia), // Chuyển về số thực
+                quantity: parseInt(soLuong), // Chuyển về số nguyên
+                profit: parseFloat(loiNhuan), // Chuyển về số thực
+                total: parseFloat(donGia) * parseInt(soLuong) // Tính tổng giá trị
             };
-
-            if (maSanPham && !isNewProduct(maSanPham)) {
-                // Sản phẩm đã tồn tại
-                productItem.idProductId = maSanPham;
-            }
-
-            // Tính tổng giá trị cho sản phẩm
-            var totalItemValue = parseFloat(donGia) * parseInt(soLuong);
-            productItem.total = totalItemValue;
 
             productData.push(productItem);
         });
@@ -359,13 +257,20 @@
         }
 
         const token = sessionStorage.getItem("token");
-
+        var inventoryReportDetailCreateFormList = productData.map(product => ({
+            idProductId: product.idProductId,
+            productName: product.productName,
+            unitPrice: product.unitPrice,
+            total: product.total,
+            profit: product.profit
+        }));
         // Tạo đối tượng dữ liệu để gửi
         var dataToSend = {
             totalPrice: totalValue,
             supplier: maNhaCungCap,
             supplierPhone: sodienthoainhacungcap,
-            inventoryReportDetailCreateFormList: productData
+            inventoryReportDetailCreateFormList: inventoryReportDetailCreateFormList
+
         };
 
         // Kiểm tra giá trị totalPrice
@@ -375,14 +280,15 @@
             return;
         }
 
-        // Gửi yêu cầu AJAX
         $.ajax({
-            type: 'PATCH', // Sử dụng PATCH thay vì POST
+            type: 'POST', // Sử dụng PATCH thay vì POST
             url: 'http://localhost:8080/InventoryReport', // Cập nhật URL nếu cần
             contentType: 'application/json', // Thiết lập kiểu nội dung là JSON
-            data: JSON.stringify(dataToSend), // Chuyển đối tượng thành chuỗi JSON
+            data: dataToSend, // Chuyển đối tượng thành chuỗi JSON
             headers: {
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + token,
+                "Content-Type": "application/x-www-form-urlencoded",
+
             },
             success: function(response) {
                 Swal.fire({
@@ -571,9 +477,8 @@
         $('#tableBody1').empty(); // Xóa nội dung cũ của bảng
         let ajaxData = {
             pageNumber: page
-        }; // Thêm tham số trang vào AJAX
+        };
 
-        // Nếu search có giá trị, thêm tham số vào object data
         if (search) {
             ajaxData.search = search;
         }
@@ -582,7 +487,7 @@
             url: 'http://localhost:8080/Product/Admin',
             type: 'GET',
             dataType: "json",
-            data: ajaxData, // Truyền object ajaxData
+            data: ajaxData,
             headers: {
                 'Authorization': 'Bearer ' + token
             },
@@ -750,84 +655,7 @@
         return currencyString.replace(/[^\d]/g, '');
     }
 
-    function xuLyPNK() {
-        var maNhaCungCap = document.getElementById('manhacungcap').value;
-        var sodienthoainhacungcap = document.getElementById('sodienthoainhacungcap').value;
-        var maPNK = document.getElementById("maPNK");
-        var totalValue = clearCurrencyFormat(document.getElementById('totalvalue').value);
-        var productData = [];
-        if (maNhaCungCap === '') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Vui lòng điền tên nhà cung cấp',
-            });
-            return; // Dừng hàm nếu nhà cung cấp chưa được chọn
-        }
-        if (sodienthoainhacungcap === '' || !validatePhoneNumber(sodienthoainhacungcap)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Số điện thoại nhà cung cấp không hợp lệ',
-            });
-            return; // Dừng hàm nếu nhà cung cấp chưa được chọn
-        }
-        $('#tableBody tr').each(function() {
-            var maSanPham = $(this).find('td:nth-child(1)').text().trim();
-            var tenSanPham = $(this).find('td:nth-child(2)').text().trim();
-            var donGia = $(this).find('td:nth-child(3) input').val().trim();
-            var dongia = donGia;
-            var soLuong = $(this).find('td:nth-child(4) input').val().trim();
-            var loiNhuan = $(this).find('td:nth-child(5) input').val().trim();
 
-            var totalItemValue = parseFloat(dongia) * parseInt(soLuong);
-
-            var productItem = {
-                'idProductId': maSanPham,
-                'unitPrice': dongia,
-                'quantity': soLuong,
-                'total': totalItemValue,
-                'profit': loiNhuan
-            };
-            productData.push(productItem);
-        });
-        if (productData.length === 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Vui lòng thêm ít nhất một sản phẩm.',
-            });
-            return false; // Dừng việc gửi form nếu productData trống
-        }
-        const token = sessionStorage.getItem("token");
-        var formData = new FormData();
-        var totalPrice = parseInt(totalValue);
-        if (isNaN(totalPrice)) {
-            console.error("Invalid totalPrice");
-            return;
-        }
-        formData.append('totalPrice', totalPrice);
-        formData.append('supplier', maNhaCungCap);
-        formData.append('supplierPhone', sodienthoainhacungcap);
-        formData.append('id', maPNK.value)
-        $.ajax({
-            type: 'PATCH',
-            url: 'http://localhost:8080/InventoryReport',
-            data: formData,
-            contentType: false, // Không gửi tiêu đề Content-Type
-            processData: false, // Không xử lý dữ liệu
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            success: function(response) {
-
-            },
-            error: function(xhr, status, error) {
-                console.error('Đã xảy ra lỗi khi gửi yêu cầu.');
-            }
-        });
-
-    }
 
     function formatCurrency(input) {
         let value = input.value;
@@ -878,10 +706,6 @@
         modalOverlay.style.display = show ? '' : 'none';
     }
 
-    function setShowModal1(show) {
-        var modalOverlay = document.querySelector('.modal_overlay1');
-        modalOverlay.style.display = show ? '' : 'none';
-    }
 
     function clearSelectedProducts() {
         localStorage.removeItem('selectedProducts');
