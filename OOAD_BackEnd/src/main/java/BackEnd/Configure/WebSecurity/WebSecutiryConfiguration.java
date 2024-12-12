@@ -110,19 +110,16 @@ public class WebSecutiryConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "/CartItem/{accountId}")                    .permitAll()
 
                         // Các API Đơn hàng
-                        .requestMatchers(HttpMethod.GET, "/Order/Admin")                        .hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Order/Admin/{id}").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/Order/MyOrder").hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.GET, "/Order/MyOrder/{id}").hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.GET, "/Order/Admin")                                .hasAnyAuthority("Manager", "Employee")
+                        .requestMatchers(HttpMethod.GET, "/Order/Admin/{id}")                           .hasAnyAuthority("Manager", "Employee")
+                        .requestMatchers(HttpMethod.GET, "/Order/MyOrder")                              .hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.GET, "/Order/MyOrder/{id}")                         .hasAnyAuthority("User", "Admin")
 
-                        .requestMatchers(HttpMethod.POST, "/Order/Admin").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.POST, "/Order/User").hasAnyAuthority("User")
-
-                        .requestMatchers(HttpMethod.PATCH, "/Order").hasAnyAuthority("Admin")
+                        .requestMatchers(HttpMethod.POST, "/Order/User")                                .hasAnyAuthority("User")
 
                         // Các API Trạng thái đơn hàng
-                        .requestMatchers(HttpMethod.POST, "/OrderStatus/Admin").hasAnyAuthority("Admin")
-                        .requestMatchers(HttpMethod.POST, "/OrderStatus/User").hasAnyAuthority("User")
+                        .requestMatchers(HttpMethod.POST, "/OrderStatus/Admin")                         .hasAnyAuthority("Manager", "Employee")
+                        .requestMatchers(HttpMethod.POST, "/OrderStatus/User")                          .hasAnyAuthority("User")
 
 
                         // TODO: API liên quan đến Inventory (nhập kho)
