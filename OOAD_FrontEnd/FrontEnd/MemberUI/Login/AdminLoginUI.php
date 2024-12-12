@@ -58,17 +58,19 @@
 
             // Gọi AJAX để xử lý yêu cầu đăng nhập
             $.ajax({
-                url: '../../../Controllers/AccountController.php',
+                url: 'http://localhost:8080/Auth/LoginAdmin',
                 type: 'POST',
                 dataType: 'json', // Định dạng dữ liệu phản hồi là JSON
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded", // Gửi dữ liệu dưới dạng form
+                },
                 data: {
-                    "email": email,
-                    "password": password,
-                    "action": "loginAdmin" // Thêm action để xác định yêu cầu đăng nhập admin
+                    email: email,
+                    password: password,
                 },
                 success: function(response) {
                     // Kiểm tra phản hồi từ server
-                    if (response.status === 200) { // Nếu đăng nhập thành công
+                    if (response.statusCode === 200) { // Nếu đăng nhập thành công
                         Swal.fire({
                             title: 'Thành công!',
                             text: response.message,
@@ -78,14 +80,15 @@
                             if (result) {
 
                                 // Lưu các thông tin vào sessionStorage
-                                sessionStorage.setItem('id', response.data.id);
-                                sessionStorage.setItem('role', response.data.role);
+                                sessionStorage.setItem('id', response.id);
+                                sessionStorage.setItem('role', response.role);
+                                sessionStorage.setItem('token', response.token);
 
-                                if (response.data.role === "Admin"){
+                                if (response.role === "Admin") {
                                     window.location.href = `../../ManagerUI/QLTaiKhoan/QLTaiKhoan.php`;
-                                }else if (response.data.role === "Manager"){
+                                } else if (response.role === "Manager") {
                                     window.location.href = `../../ManagerUI/QLSanPham/QLSanPham.php`;
-                                }if (response.data.role === "Employee"){
+                                } else if (response.role === "Employee") {
                                     window.location.href = `../../ManagerUI/QLSanPham/QLSanPham.php`;
                                 }
                             }

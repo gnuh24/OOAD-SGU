@@ -134,14 +134,11 @@
         const maSanPham = urlParams.get('maSanPham');
         if (maSanPham) {
             $.ajax({
-                url: "../../Controllers/ProductController.php",
+                url: "http://localhost:8080/Product/CommonUser/" + maSanPham,
                 method: "GET",
                 dataType: "json",
-                data: {
-                    Id: maSanPham
-                },
                 success: function(response) {
-                    const product = response.data;
+                    const product = response;
                     const soLuongConLai = product.quantity;
                     const quantityMessage = soLuongConLai > 0 ?
                         `Còn ${soLuongConLai} sản phẩm` :
@@ -157,20 +154,16 @@
                     const price = product.price ? product.price : 'Giá chưa cập nhật';
                     let discountedPrice, originalPriceDisplay;
 
-                    if (product.sale === 0) {
-                        discountedPrice = (price).toFixed(2); // Tính giá giảm 10%
-                        originalPriceDisplay = `<p class="original-price" style="text-decoration: line-through; color: rgb(146, 26, 26);">${formatCurrency((price * 1.1).toFixed(2))}</p>`;
-                    } else {
-                        discountedPrice = price * (1 - product.sale / 100);
-                        originalPriceDisplay = `<p class="original-price" style="text-decoration: line-through; color: rgb(146, 26, 26);">${formatCurrency((price).toFixed(2))}</p>`;
-                    }
+                    discountedPrice = (price).toFixed(2); // Tính giá giảm 10%
+                    originalPriceDisplay = `<p class="original-price" style="text-decoration: line-through; color: rgb(146, 26, 26);">${formatCurrency((price * 1.1).toFixed(2))}</p>`;
+
 
                     let htmlContent = `
     <div class="product_images__wrapper">
         <div class="image" style="position: relative;">
-            <img src="../img/${productImage}" alt="${productName}" class="product_img">
+            <img src="https://res.cloudinary.com/djhoea2bo/image/upload/v1711511636/${productImage}" alt="${productName}" class="product_img">
            <div class="sale-label" ">
-                                -${product.sale === 0 ?"10":product.sale}% 
+                                -10% 
                             </div>   
         </div>
     </div>

@@ -35,23 +35,12 @@
             cancelButtonText: 'Hủy'
         }).then((result) => {
             if (result.isConfirmed) {
-                const refreshToken = sessionStorage.getItem("refreshToken");
-                if (refreshToken) {
-                    // Gọi API logout qua Ajax
+                sessionStorage.removeItem('id');
+                sessionStorage.removeItem('token');
+                // Chuyển hướng về trang đăng nhập
+                window.location.href = "../../MemberUI/Login/AdminLoginUI.php";
 
-                    sessionStorage.removeItem('id');
-                    sessionStorage.removeItem('token');
-                    sessionStorage.removeItem('refreshToken');
-                    // Chuyển hướng về trang đăng nhập
-                    window.location.href = "../../MemberUI/Login/AdminLoginUI.php";
 
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Không tìm thấy refreshToken',
-                    });
-                }
             }
         });
     });

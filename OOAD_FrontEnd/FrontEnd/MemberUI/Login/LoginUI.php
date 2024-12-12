@@ -175,7 +175,7 @@
         try {
             const emailExists = await checkEmail(email.value); // đợi kết quả
 
-            if (emailExists.data.isExists === true) {
+            if (emailExists === true) {
                 Swal.fire({
                     title: 'Lỗi!',
                     text: 'Email tồn tại',
@@ -196,14 +196,15 @@
 
 
         $.ajax({
-            url: '../../../Controllers/AccountController.php',
+            url: 'http://localhost:8080/Auth/Registration',
             type: 'POST',
             dataType: 'json',
-
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded", // Gửi dữ liệu dưới dạng form
+            },
             data: {
-                "email": email.value,
-                "password": matKhau.value,
-                "action": "registration"
+                email: email.value,
+                password: matKhau.value,
             },
             success: function(response) {
                 // Kiểm tra xem phản hồi có thành công hay không
@@ -215,7 +216,6 @@
                 });
             },
             error: function(xhr, status, error) {
-
                 Swal.fire({
                     title: 'Lỗi!',
                     text: 'Đã xảy ra lỗi khi đăng kí tài khoản!',
@@ -224,8 +224,6 @@
                 });
             }
         });
-
-
     });
 
     function isValidEmail(email) {
@@ -237,16 +235,15 @@
     async function checkEmail(email) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: '../../../Controllers/AccountController.php',
+                url: 'http://localhost:8080/Account/isThisEmailExists',
                 type: 'GET',
                 dataType: 'json',
                 data: {
                     email: email,
-                    action: "isThisEmailExists"
                 },
                 success: function(response) {
-                    console.log("Thành công : " + response)
                     resolve(response); // Resolve the promise with the response
+
                 },
                 error: function(error) {
                     console.log("Thất bại : " + error)
@@ -264,7 +261,7 @@
     const tenDangNhap = document.getElementById("tenDangNhapLogin");
     const matKhau = document.getElementById("passwordLogin");
 
-   
+
 
     loginButton.addEventListener("click", (event) => {
         event.preventDefault();
@@ -298,18 +295,20 @@
     function login(email, password) {
 
         $.ajax({
-            url: '../../../Controllers/AccountController.php',
+            url: 'http://localhost:8080/Auth/SignIn',
             type: 'POST',
             dataType: 'json',
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded", // Gửi dữ liệu dưới dạng form
+            },
             data: {
-                "email": email,
-                "password": password,
-                "action": "loginUser"
+                email: email,
+                password: password,
             },
             success: function(response) {
                 // Kiểm tra xem phản hồi có thành công hay không
 
-                if (response.status === 200) {
+                if (response.statusCode === 200) {
                     Swal.fire({
                         title: 'Thành công!',
                         text: response.message,
@@ -317,23 +316,12 @@
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result) {
-                            const quyen = response.data.role;
+                            const quyen = response.role;
 
-                            sessionStorage.setItem('id', response.data.id);
-                            sessionStorage.setItem('email', response.data.email);
-                            sessionStorage.setItem('role', response.data.role);
+                            sessionStorage.setItem('id', response.id);
+                            sessionStorage.setItem('token', response.token);
 
-                            switch (quyen) {
-                                case 'Admin':
-                                    window.location.href = `../../AdminUI/QLTaiKhoan.php`;
-                                    break;
-                                case 'Manager':
-                                    window.location.href = `../../ManagerUI/QLLoaiSanPham/QLLoaiSanPham.php`;
-                                    break;
-                                default:
-                                    window.location.href = `../HomePage.php`;
-                                    break;
-                            }
+                            window.location.href = `../HomePage.php`;
                         }
                     });
                 } else {
@@ -358,7 +346,7 @@
             }
         });
     }
-    
+
     sendEmailButton.addEventListener("click", async (event) => {
         event.preventDefault(); // Ngăn chặn hành động mặc định
 

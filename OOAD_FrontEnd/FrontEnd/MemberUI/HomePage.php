@@ -168,66 +168,48 @@
     function getAllSanPham() {
         // Gọi API để lấy dữ liệu sản phẩm
         $.ajax({
-            url: "../../Controllers/ProductController.php",
+            url: "http://localhost:8080/Product/CommonUser",
             method: "GET",
             dataType: "json",
             data: {
-                action: "getAllProductsCommonUser"
+                pageSize: 6
             },
             success: function(response) {
                 var productContainer = $('#product .products');
-                if (response.data && response.data.length > 0) {
-                    // Tạo biến lưu trữ nội dung HTML mới
+                if (response.content && response.content.length > 0) {
                     var htmlContent = '';
-                    // Biến đếm số lượng sản phẩm
                     var count = 0;
-                    // Duyệt qua từng sản phẩm và tạo nội dung HTML tương ứng
-                    $.each(response.data, function(index, product) {
+                    $.each(response.content, function(index, product) {
                         // Kiểm tra nếu số lượng sản phẩm đã đạt tới 4 thì dừng lại
                         if (count >= 6) {
                             return false;
                         }
-                        var imageSrc = product.Image;
+                        var imageSrc = product.image;
                         htmlContent += `
-                                <div class="col-md-3 col-sm-6 mb-4">
+                                <div class="col-md-4 col-sm-6 mb-4">
                                     <div class="product-card-content" style="position: relative;">
-                                        <a href="ProductDetail.php?maSanPham=${product.Id}">
+                                        <a href="ProductDetail.php?maSanPham=${product.id}">
                                                 
-                                            <img src="../img/${product.Image}" alt="" style="height: 300px;">
+                                            <img src="https://res.cloudinary.com/djhoea2bo/image/upload/v1711511636/${product.image}" alt="" style="height: 300px;">
                                         
                             <div class="sale-label" ">
-                                                            -${product.Sale === 0 ?"10":product.Sale}% 
+                                                            -10% 
                                                         </div>   
                                                                         <div class="product-card-details">
-                                                <h4 class="name-product">${product.ProductName}</h4>`;
+                                                <h4 class="name-product">${product.productName}</h4>`;
 
-                        if (product.Sale === 0) {
-                            // Calculate the inflated and discounted prices
-                            const inflatedPrice = Math.ceil(product.UnitPrice / (90 / 100));
-                            const discountPrice = product.UnitPrice;
+                        // Calculate the inflated and discounted prices
+                        const inflatedPrice = Math.ceil(product.price / (90 / 100));
+                        const discountPrice = product.price;
 
-                            htmlContent += `
-                                                <p class="price-tea text-center" style="text-decoration: line-through; color: gray;">
-                                                    <i class="fas fa-tag"></i> ${formatCurrency(inflatedPrice)}
-                                                </p>
-                                                <p class="price-tea text-center" style="color: rgb(146, 26, 26); font-weight: bold;">
-                                                    <i class="fas fa-percent"></i> ${formatCurrency(discountPrice)}
-                                                </p>
-                                            `;
-                        } else {
-                            // Calculate the sale price
-                            const salePrice = product.UnitPrice * (1 - product.Sale / 100);
-
-                            htmlContent += `
-                                                <p class="price-tea text-center" style="text-decoration: line-through; color: gray;">
-                                                    <i class="fas fa-tag"></i> ${formatCurrency(product.UnitPrice)}
-                                                </p>
-                                                <p class="price-tea text-center" style="color: rgb(146, 26, 26); font-weight: bold;">
-                                                    <i class="fas fa-percent"></i> ${formatCurrency(salePrice)}
-                                                </p>
-                                            `;
-                        }
-
+                        htmlContent += `
+                                        <p class="price-tea text-center" style="text-decoration: line-through; color: gray;">
+                                            <i class="fas fa-tag"></i> ${formatCurrency(inflatedPrice)}
+                                        </p>
+                                        <p class="price-tea text-center" style="color: rgb(146, 26, 26); font-weight: bold;">
+                                            <i class="fas fa-percent"></i> ${formatCurrency(discountPrice)}
+                                        </p>
+                                    `;
                         htmlContent += `
                                                 <div class="buy-btn-container">
                                                     Mua ngay

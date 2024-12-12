@@ -329,11 +329,10 @@
         const categoryId = currentFilters.categoryId === 0 ? null : currentFilters.categoryId;
 
         $.ajax({
-            url: "../../Controllers/ProductController.php",
+            url: "http://localhost:8080/Product/CommonUser",
             method: "GET",
             dataType: "json",
             data: {
-                action: "getAllProductsCommonUser",
                 pageNumber: page,
                 pageSize: pageSizeGlobal,
                 search: currentFilters.search,
@@ -348,44 +347,29 @@
             },
             success: function(response) {
                 const productContainer = $('#product .products');
-                if (response.data && response.data.length > 0) {
+                if (response.content && response.content.length > 0) {
                     let htmlContent = '';
-                    $.each(response.data, function(index, product) {
+                    $.each(response.content, function(index, product) {
                         htmlContent += `
-                                        <form id="productForm_${product.Id}" method="post" action="ProductDetail.php?maSanPham=${product.Id}">
+                                        <form id="productForm_${product.id}" method="post" action="ProductDetail.php?maSanPham=${product.id}">
                                             <div class="row">
-                                                <a href="ProductDetail.php?maSanPham=${product.Id}" class="text-center" style="display: block; position: relative;">
-                                                    <img src="../img/${product.Image}" alt="" style="width:100%;height:300px;">
+                                                <a href="ProductDetail.php?maSanPham=${product.id}" class="text-center" style="display: block; position: relative;">
+                                                    <img src="https://res.cloudinary.com/djhoea2bo/image/upload/v1711511636/${product.image}" alt="" style="width:100%;height:300px;">
                                                     <div class="sale-label" ">
-                                                                    -${product.Sale === 0 ?"10":product.Sale}% 
+                                                                    -10% 
                                                                 </div>               
                                                 <div class="product-card-content">
                                                         <div class="price">
-                                                            <h4 class="name-product">${product.ProductName}</h4>`;
-
-                        if (product.Sale === 0) {
-                            const inflatedPrice = Math.ceil(product.UnitPrice / (90 / 100));
-                            const discountPrice = product.UnitPrice;
-
-                            htmlContent += `
+                                                            <h4 class="name-product">${product.productName}</h4>`;
+                        const inflatedPrice = Math.ceil(product.price / (90 / 100));
+                        const discountPrice = product.price;
+                        htmlContent += `
                                                                                 <p class="price-tea" style="text-decoration: line-through; color: gray;">
                                                                                     <i class="fas fa-tag"></i> ${formatCurrency(inflatedPrice)}
                                                                                 </p>
                                                                                 <p class="price-tea" style="color: rgb(146, 26, 26); font-weight: bold;">
                                                                                     <i class="fas fa-percent"></i> ${formatCurrency(discountPrice)}
                                                                                 </p>`;
-                        } else {
-                            const salePrice = product.UnitPrice * (1 - product.Sale / 100);
-
-                            htmlContent += `
-                                                                                <p class="price-tea" style="text-decoration: line-through; color: gray;">
-                                                                                    <i class="fas fa-tag"></i> ${formatCurrency(product.UnitPrice)}
-                                                                                </p>
-                                                                                <p class="price-tea" style="color: rgb(146, 26, 26); font-weight: bold;">
-                                                                                    <i class="fas fa-percent"></i> ${formatCurrency(salePrice)}
-                                                                                </p>`;
-                        }
-
                         htmlContent += `
                                                         </div>
                                                         <div class="buy-btn-container">
@@ -396,9 +380,6 @@
                                             </div>
                                         </form>
                                     `;
-
-
-
                     });
 
                     // Update product list and pagination
@@ -453,18 +434,18 @@
 
     function getCategories() {
         $.ajax({
-            url: "../../controllers/CategoryController.php",
+            url: "http://localhost:8080/Category/noPaging",
             method: "GET",
             dataType: "json",
             success: function(response) {
-                if (response.data && response.data.length > 0) {
+                if (response && response.length > 0) {
                     // Xóa tất cả các option hiện có trong dropdown
                     $('#category-filter').empty();
                     // Thêm option "Tất cả"
                     $('#category-filter').append('<option value="">Tất cả</option>');
                     // Duyệt qua danh sách loại sản phẩm và thêm từng option vào dropdown
-                    $.each(response.data, function(index, category) {
-                        $('#category-filter').append(`<option value="${category.Id}">${category.CategoryName}</option>`);
+                    $.each(response, function(index, category) {
+                        $('#category-filter').append(`<option value="${category.id}">${category.categoryName}</option>`);
                     });
                 } else {
                     console.log("Không có loại sản phẩm nào được trả về từ API.");
@@ -478,18 +459,18 @@
 
     function getBrands() {
         $.ajax({
-            url: "../../controllers/BrandController.php",
+            url: "http://localhost:8080/Brand/noPaging",
             method: "GET",
             dataType: "json",
             success: function(response) {
-                if (response.data && response.data.length > 0) {
+                if (response && response.length > 0) {
                     // Xóa tất cả các option hiện có trong dropdown
                     $('#brand-filter').empty();
                     // Thêm option "Tất cả"
                     $('#brand-filter').append('<option value="">Tất cả</option>');
                     // Duyệt qua danh sách loại sản phẩm và thêm từng option vào dropdown
-                    $.each(response.data, function(index, category) {
-                        $('#brand-filter').append(`<option value="${category.Id}">${category.BrandName}</option>`);
+                    $.each(response, function(index, category) {
+                        $('#brand-filter').append(`<option value="${category.brandId}">${category.brandName}</option>`);
                     });
                 } else {
                     console.log("Không có loại sản phẩm nào được trả về từ API.");
