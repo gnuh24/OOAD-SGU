@@ -76,15 +76,15 @@ CREATE TABLE IF NOT EXISTS `Account`(
 );
 
 
--- DROP TABLE IF EXISTS `Token`;
--- CREATE TABLE IF NOT EXISTS `Token`(
---     `Id`                INT UNSIGNED       PRIMARY KEY      AUTO_INCREMENT,
---     `Token`             CHAR(36)           NOT NULL         UNIQUE,
---     `CreateTime`	    DATETIME		   NOT NULL,
---     `Expiration`    	DATETIME           NOT NULL,
---     `AccountId`         INT UNSIGNED       NOT NULL,
---     FOREIGN KEY (`AccountId`) REFERENCES `Account`(`Id`)
--- );
+DROP TABLE IF EXISTS `Token`;
+CREATE TABLE IF NOT EXISTS `Token`(
+    `Id`                INT UNSIGNED       PRIMARY KEY      AUTO_INCREMENT,
+    `Token`             CHAR(36)           NOT NULL         UNIQUE,
+    `CreateTime`	    DATETIME		   NOT NULL,
+    `Expiration`    	DATETIME           NOT NULL,
+    `AccountId`         INT UNSIGNED       NOT NULL,
+    FOREIGN KEY (`AccountId`) REFERENCES `Account`(`Id`)
+);
 
 
 /*________________________________________________________________________ TODO: Order tables_______________________________________________________________________ */
@@ -133,25 +133,25 @@ CREATE TABLE IF NOT EXISTS `OrderDetail` (
 );
 
 
--- /*______________________________________________________________________INVENTORY_________________________________________________________________________________________ */
--- DROP TABLE IF EXISTS `InventoryReport`;
--- CREATE TABLE IF NOT EXISTS `InventoryReport` (
---     `Id`           	INT UNSIGNED       	PRIMARY KEY    AUTO_INCREMENT,
---     `CreateTime`   	DATETIME           	NOT NULL                    ,
---     `Supplier` 		NVARCHAR(255)									,
---     `SupplierPhone`	NVARCHAR(100)									,
---     `TotalPrice`	INT UNSIGNED		NOT NULL
--- );
+/*______________________________________________________________________INVENTORY_________________________________________________________________________________________ */
+DROP TABLE IF EXISTS `InventoryReport`;
+CREATE TABLE IF NOT EXISTS `InventoryReport` (
+    `Id`           	INT UNSIGNED       	PRIMARY KEY    AUTO_INCREMENT,
+    `CreateTime`   	DATETIME           	NOT NULL                    ,
+    `Supplier` 		NVARCHAR(255)									,
+    `SupplierPhone`	NVARCHAR(100)									,
+    `TotalPrice`	INT UNSIGNED		NOT NULL
+);
 
--- DROP TABLE IF EXISTS `InventoryReportDetail`;
--- CREATE TABLE IF NOT EXISTS `InventoryReportDetail` (
---     `InventoryReportId`       	INT UNSIGNED       	NOT NULL,
---     `ProductId`        			INT UNSIGNED       	NOT NULL,
---     `Quantity`      			INT UNSIGNED       	NOT NULL,
---     `UnitPrice`     			INT UNSIGNED       	NOT NULL,
---     `Total`         			INT UNSIGNED       	NOT NULL,
---     `Profit`					INT UNSIGNED		NOT NULL,
---     FOREIGN KEY (`InventoryReportId`) REFERENCES `InventoryReport`(`Id`),
---     FOREIGN KEY (`ProductId`)     REFERENCES `Product`(`Id`),
---     PRIMARY KEY (`ProductId`, `InventoryReportId`)
--- );
+DROP TABLE IF EXISTS `InventoryReportDetail`;
+CREATE TABLE IF NOT EXISTS `InventoryReportDetail` (
+    `InventoryReportId`       	INT UNSIGNED       	NOT NULL,
+    `ProductId`        			INT UNSIGNED       	NOT NULL,
+    `Quantity`      			INT UNSIGNED       	NOT NULL,
+    `UnitPrice`     			INT UNSIGNED       	NOT NULL,
+    `Total`         			INT UNSIGNED       	NOT NULL,
+    `Profit`					INT UNSIGNED		NOT NULL,
+    FOREIGN KEY (`InventoryReportId`) REFERENCES `InventoryReport`(`Id`),
+    FOREIGN KEY (`ProductId`)     REFERENCES `Product`(`Id`),
+    PRIMARY KEY (`ProductId`, `InventoryReportId`)
+);

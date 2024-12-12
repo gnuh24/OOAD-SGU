@@ -39,7 +39,7 @@ public class BatchService implements IBatchService{
         Batch batch = new Batch();
         batch.setUnitPrice(form.getUnitPrice());
         batch.setQuantity(form.getQuantity());
-        batch.setMaxQuantity(form.getMaxQuantity());
+        batch.setMaxQuantity(form.getQuantity());
 
 
         Product product = productService.getProductById(form.getProductId());
