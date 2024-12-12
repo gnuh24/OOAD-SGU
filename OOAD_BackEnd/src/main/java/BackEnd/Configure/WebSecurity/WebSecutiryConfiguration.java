@@ -103,11 +103,11 @@ public class WebSecutiryConfiguration {
                         // TODO: Các API liên quan đến chức năng mua hàng
 
                         // Các API Giỏ hàng
-                        .requestMatchers(HttpMethod.GET, "/CartItem/{accountId}")                       .hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.POST, "/CartItem")                                  .hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/CartItem")                                 .hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.DELETE, "/CartItem")                                .hasAnyAuthority("User", "Admin")
-                        .requestMatchers(HttpMethod.DELETE, "/CartItem/{accountId}")                    .hasAnyAuthority("User", "Admin")
+                        .requestMatchers(HttpMethod.GET, "/CartItem/{accountId}")                       .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/CartItem")                                  .permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/CartItem")                                 .permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/CartItem")                                .permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/CartItem/{accountId}")                    .permitAll()
 
                         // Các API Đơn hàng
                         .requestMatchers(HttpMethod.GET, "/Order/Admin")                        .hasAnyAuthority("Admin")
