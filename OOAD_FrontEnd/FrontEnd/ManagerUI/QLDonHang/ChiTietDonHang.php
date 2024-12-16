@@ -128,6 +128,7 @@
                     <div class='divider'></div>`;
                 });
                 transaction_list.innerHTML = items;
+                document.getElementById("tenphuongthuc").innerHTML = data.payment;
 
                 document.getElementById("hoten").innerHTML = `<span>Họ tên:</span> ${data.userInformation.fullname}`;
                 document.getElementById("diachigiaohang").innerHTML = `<span>Địa chỉ: </span>${data.userInformation.address}`;

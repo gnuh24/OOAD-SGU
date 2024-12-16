@@ -30,6 +30,12 @@
     var email = '';
 
 
+    function formatDateForInput(dateString) {
+        // Tách ngày, tháng, năm từ chuỗi dd/MM/yyyy
+        const [day, month, year] = dateString.split('/');
+        // Trả về chuỗi theo định dạng yyyy-MM-dd
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
 
     function loadUserInfoFromsessionStorage() {
         // Lấy dữ liệu từ sessionStorage
@@ -42,57 +48,54 @@
         }
 
         $.ajax({
-            url: '../../Controllers/UserInformationController.php',
+            url: 'http://localhost:8080/Account/' + userData,
             method: "GET",
             dataType: "json",
-            data: {
-                Id: userData
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
             },
             success: function(response) {
                 // Kiểm tra nếu phản hồi chứa dữ liệu
-                if (response && response.data) {
-                    var userInfo = response.data; // Lấy thông tin người dùng đầu tiên từ mảng dữ liệu
-                    // Format thông tin hiển thị
-                    var infoPage = document.getElementById("contentprofile");
-                    console.log(userInfo.Gender);
-                    
-                    console.log(userInfo.Birthday);
-
-                    infoPage.innerHTML = `
+                var userInfo = response; // Lấy thông tin người dùng đầu tiên từ mảng dữ liệu
+                // Format thông tin hiển thị
+                var infoPage = document.getElementById("contentprofile");
+                infoPage.innerHTML = `
                     <div class='col-xxl-8 mb-5 mb-xxl-0'>
-                        <form name="profileForm" action="Profile.php?maTaiKhoan=${userInfo.Id}" method="POST" onsubmit="return validateForm()">
+                        <form name="profileForm" action="Profile.php?maTaiKhoan=${userInfo.accountId}" method="POST" onsubmit="return validateForm()">
                             <div class='bg-secondary-soft px-4 py-5 rounded'>
                                 <div class='row g-3' style='text-align:left;'>
                                     <div class='col-md-6'>
                                         <label class='form-label'>Họ tên *</label>
-                                        <input type='text' class='form-control' name='hoten' value='${userInfo.Fullname ? userInfo.Fullname : ''}'>
+                                        <input type='text' class='form-control' name='hoten' value='${userInfo.fullname ? userInfo.fullname : ''}'>
                                     </div>
                                     <div class='col-md-6'>
                                         <label class='form-label'>Số điện thoại *</label>
-                                        <input type='text' class='form-control' name='sodienthoai' value='${userInfo.PhoneNumber ? userInfo.PhoneNumber : ''}'>
+                                        <input type='text' class='form-control' name='sodienthoai' value='${userInfo.phoneNumber ? userInfo.phoneNumber : ''}'>
                                     </div>
                                     <div class='col-md-6'>
                                         <label for='gioitinh'>Giới tính</label>
                                         <div class='form-check form-check-inline'>
-                                            <input class='form-check-input' type='radio' name='gioitinh' id='inlineRadio1' value='Male' ${userInfo.Gender === 'Male' ? 'checked' : ''}>
+                                            <input class='form-check-input' type='radio' name='gioitinh' id='inlineRadio1' value='Male' ${userInfo.gender === 'Male' ? 'checked' : ''}>
                                             <label class='form-check-label' for='inlineRadio1'>Nam</label>
                                         </div>
                                         <div class='form-check form-check-inline'>
-                                            <input class='form-check-input' type='radio' name='gioitinh' id='inlineRadio2' value='Female' ${userInfo.Gender === 'Female' ? 'checked' : ''}>
+                                            <input class='form-check-input' type='radio' name='gioitinh' id='inlineRadio2' value='Female' ${userInfo.gender === 'Female' ? 'checked' : ''}>
                                             <label class='form-check-label' for='inlineRadio2'>Nữ</label>
                                         </div>
                                     </div>
                                     <div class='col-md-6'>
                                         <label for='birthday'>Ngày sinh</label>
-                                        <input type='date' class='form-control' id='birthday' name='ngaysinh' onchange='validateAge()' value='${(userInfo.Birthday)}'>
-                                    </div>
+<input type='date' class='form-control' id='birthday' name='ngaysinh' 
+       onchange='validateAge()' 
+       value='${formatDateForInput(userInfo.birthday)}'>
+                                           </div>
                                     <div class='col-md-6'>
                                         <label for='inputEmail4' class='form-label'>Email *</label>
-                                        <input type='email' class='form-control' id='inputEmail4' name='email' value='${userInfo.Email}' readonly >
+                                        <input type='email' class='form-control' id='inputEmail4' name='email' value='${userInfo.email}' readonly >
                                     </div>
                                     <div class='col-md-6'>
                                         <label class='form-label'>Địa chỉ *</label>
-                                        <input type='text' class='form-control' name='diachi' value='${userInfo.Address ? userInfo.Address : ''}'>
+                                        <input type='text' class='form-control' name='diachi' value='${userInfo.address ? userInfo.address : ''}'>
                                     </div>
                                     <button class='btn btn-primary' type='submit' style='background-color: rgb(146, 26, 26);'>Thay đổi thông tin</button>
                                 </div>
@@ -100,9 +103,7 @@
                         </form>
                     </div>
                 `;
-                } else {
-                    console.error("No user data found in response");
-                }
+
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -176,21 +177,22 @@
             });
             return false;
         }
-
-        // Chuẩn bị dữ liệu gửi đi
-        var formData = {
-            accountId: accountId,
-            fullname: fullname,
-            phone: phone,
-            birthday: birthday,
-            gender: gender,
-            address: address
-        };
-
         $.ajax({
-            url: "../../Controllers/UserInformationController.php",
+            url: "http://localhost:8080/Account/UpdateInformation",
             method: "PATCH",
-            data: JSON.stringify(formData), // Dữ liệu ở dạng JSON
+            data: {
+                accountId: accountId,
+                fullname: fullname,
+                phone: phone,
+                birthday: birthday,
+                gender: gender,
+                address: address
+            },
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                "Content-Type": "application/x-www-form-urlencoded",
+
+            },
             contentType: "application/json",
             success: function(response) {
                 Swal.fire({

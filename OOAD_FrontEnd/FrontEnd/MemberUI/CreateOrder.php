@@ -298,37 +298,28 @@
                 formData.append(`listOrderDetail[${index}].productId`, item.productId);
                 formData.append(`listOrderDetail[${index}].unitPrice`, item.unitPrice);
                 formData.append(`listOrderDetail[${index}].quantity`, item.quantity);
-                formData.append(`listOrderDetail[${index}].total`, item.total);
+                formData.append(`listOrderDetail[${index}].total`, item.unitPrice * item.quantity);
             });
         } else {
             console.error("Dữ liệu giỏ hàng không hợp lệ");
         }
 
-        if (selectedPaymentMethod === "VNPAY") {
 
-            // Lưu các trường cần thiết từ formData vào localStorage
-            const orderData = {};
-            formData.forEach((value, key) => {
-                orderData[key] = value; // Lưu trữ dữ liệu từ FormData vào đối tượng
-            });
+        $.ajax({
+            url: "http://localhost:8080/Order/User",
+            method: "POST",
+            data: formData,
+            processData: false, // Ngăn jQuery xử lý dữ liệu
+            contentType: false, // Ngăn jQuery thiết lập tiêu đề `Content-Type`
 
-            // Chỉ lưu trữ dưới dạng JSON những trường cần thiết
-            localStorage.setItem("donHangDangThanhToan", JSON.stringify(orderData));
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
+            },
+            success: function(response) {
+                if (response.url != null) {
+                    window.location.href = response.url;
 
-
-            thanhToanVNPay(orderId, totalpriceall);
-        } else {
-            $.ajax({
-                url: "http://localhost:8080/Order/User",
-                method: "POST",
-                data: formData,
-                processData: false, // Ngăn jQuery xử lý dữ liệu
-                contentType: false, // Ngăn jQuery thiết lập tiêu đề `Content-Type`
-
-                headers: {
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
-                },
-                success: function(response) {
+                } else {
                     Swal.fire({
                         title: 'Đặt hàng thành công!',
                         text: 'Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất có thể.',
@@ -340,52 +331,15 @@
                             window.location.href = 'HomePage.php'; // Chuyển hướng đến trang sản phẩm
                         }
                     });
-                },
-                error: function(xhr, status, error) {
-                    console.error("Lỗi:", error);
                 }
-            });
-        }
+            },
+            error: function(xhr, status, error) {
+                console.error("Lỗi:", error);
+            }
+        });
 
 
-    }
 
-    function thanhToanVNPay(orderId, totalpriceall) {
-        // Tạo form mới
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "./vnpay_payment/xuLyThanhToan_vnpay.php";
-
-        // Thêm các dữ liệu cần thiết vào form
-        const orderIdInput = document.createElement("input");
-        orderIdInput.type = "hidden";
-        orderIdInput.name = "order_id";
-        orderIdInput.value = orderId;
-        form.appendChild(orderIdInput);
-
-        const orderDescInput = document.createElement("input");
-        orderDescInput.type = "hidden";
-        orderDescInput.name = "order_desc";
-        orderDescInput.value = `Khách hàng ${document.getElementById('username').value} thanh toán đơn hàng ${orderId}`;
-        form.appendChild(orderDescInput);
-
-        const amountInput = document.createElement("input");
-        amountInput.type = "hidden";
-        amountInput.name = "amount";
-        amountInput.value = totalpriceall;
-        form.appendChild(amountInput);
-
-
-        // Tạo nút submit có name="redirect"
-        const submitButton = document.createElement("button");
-        submitButton.type = "submit";
-        submitButton.name = "redirect";
-        submitButton.style.display = "none"; // Ẩn nút
-        form.appendChild(submitButton);
-
-        // Thêm form vào body và submit
-        document.body.appendChild(form);
-        submitButton.click(); // Kích hoạt submit
     }
 </script>
 
