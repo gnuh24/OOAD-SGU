@@ -157,27 +157,27 @@
             case 'ChoDuyet':
                 $icon1.css("color", "green");
                 $circleContainer1.css("border-color", "green");
-                $thoiGian1.html(convertDateTimeFormat(thoiGianValue));
+                $thoiGian1.html((thoiGianValue));
                 break;
             case 'DaDuyet':
                 $icon2.css("color", "green");
                 $line1.css("color", "green");
                 $circleContainer2.css("border-color", "green");
-                $thoiGian2.html(convertDateTimeFormat(thoiGianValue));
+                $thoiGian2.html((thoiGianValue));
 
                 break;
             case 'DangGiao':
                 $icon3.css("color", "green");
                 $line2.css("color", "green");
                 $circleContainer3.css("border-color", "green");
-                $thoiGian3.html(convertDateTimeFormat(thoiGianValue));
+                $thoiGian3.html((thoiGianValue));
 
                 break;
             case 'GiaoThanhCong':
                 $icon4.css("color", "green");
                 $line3.css("color", "green");
                 $circleContainer4.css("border-color", "green");
-                $thoiGian4.html(convertDateTimeFormat(thoiGianValue));
+                $thoiGian4.html((thoiGianValue));
 
                 break;
             case 'Huy':
@@ -200,7 +200,7 @@
                 $icon5.css("color", "rgb(146, 26, 26)");
                 $line4.css("color", "rgb(146, 26, 26)");
                 $circleContainer5.css("border-color", "rgb(146, 26, 26)");
-                $thoiGian5.html(convertDateTimeFormat(thoiGianValue));
+                $thoiGian5.html((thoiGianValue));
 
                 break;
             default:
@@ -210,36 +210,34 @@
 
     function loadOrderData(maOrder) {
         $.ajax({
-            url: '../../Controllers/OrderController.php', // Đường dẫn API lấy chi tiết đơn hàng
+            url: 'http://localhost:8080/Order/MyOrder/' + maOrder, // Đường dẫn API lấy chi tiết đơn hàng
             method: 'GET',
             dataType: 'json',
-            data: {
-                idOrder: maOrder // Use 'Id' based on your response structure
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
             },
             success: function(response) {
-                console.log(response.data);
                 let totalPrice_Shipping = 0;
                 let productListHtml = '';
                 let html = '';
                 // Xử lý từng sản phẩm trong kết quả trả về
-                response.data.details.forEach(function(cartProduct) {
-                    totalPrice_Shipping += cartProduct.Total;
-                    const formattedPrice = formatCurrency(cartProduct.UnitPrice);
-                    const formattedTotalPrice = formatCurrency(cartProduct.Total);
+                response.orderDetails.forEach(function(cartProduct) {
+                    const formattedPrice = formatCurrency(cartProduct.unitPrice);
+                    const formattedTotalPrice = formatCurrency(cartProduct.total);
 
                     // Thêm sản phẩm vào danh sách HTML
                     productListHtml += `
                                             <div class='radio__wrapper'>
                                                 <div>
-                                                    <div class='cartItem' id='${cartProduct.ProductId}'>
-                                                        <a href='#' class='img'><img class='img' src='../img/${cartProduct.Image}' /></a>
+                                                    <div class='cartItem' id='${cartProduct.productId}'>
+                                                        <a href='#' class='img'><img class='img' src='https://res.cloudinary.com/djhoea2bo/image/upload/v1711511636/${cartProduct.image}' /></a>
                                                         <div class='inforCart'>
                                                             <div class='nameAndPrice'>
-                                                                <a href='#' class='nameCart'>${cartProduct.ProductName}</a>
+                                                                <a href='#' class='nameCart'>${cartProduct.productName}</a>
                                                                 <p class='priceCart'>${formattedPrice}</p>
                                                             </div>
                                                             <div class='quantity'>
-                                                                <div class='txtQuantity'>${cartProduct.Quantity}</div>
+                                                                <div class='txtQuantity'>${cartProduct.quantity}</div>
                                                             </div>
                                                         </div>
                                                         <div class='wrapTotalPriceOfCart'>
@@ -257,46 +255,34 @@
                 html = `
                         <div class="container mt-4">
                             <div class="info__wrapper order_info2">
-                                <p><span class="span1">Mã đơn hàng:</span><span class="span2" id="id">${response.data.info.OrderId}</span></p>
-                                <p><span class="span1">Thời gian đặt hàng:</span><span class="span2" id="orderTime">${convertDateTimeFormat(response.data.info.OrderTime)}</span></p>
-                                <p><span class="span1">Ghi chú:</span><span class="span2" id="note">${response.data.info.Note==null?'':response.data.info.Note}</span></p>
-                                <p><span class="span1">Tình trạng:</span><span class="span2" id="note">${response.data.info.isPaid==0?'Chưa thanh toán':'Đã thanh toán'}</span></p>
-                                <p><span class="span1">Phương thức thanh toán:</span><span class="span2" id="note">${response.data.info.Payment}</span></p>
+                                <p><span class="span1">Mã đơn hàng:</span><span class="span2" id="id">${response.id}</span></p>
+                                <p><span class="span1">Thời gian đặt hàng:</span><span class="span2" id="orderTime">${(response.orderTime)}</span></p>
+                                <p><span class="span1">Ghi chú:</span><span class="span2" id="note">${response.note==null?'':response.note}</span></p>
+                                <p><span class="span1">Phương thức thanh toán:</span><span class="span2" id="note">${response.payment}</span></p>
 
                             </div>
 
-                            <div class="divider"></div>
-
-                            <div class="total__info">
-                                <p>Tạm tính</p>
-                                <p id="totalPrice"></p>
-                            </div>
-
-                            <div class="total__info">
-                                <p>Giảm giá</p>
-                                <p id="totalPrice">${formatCurrency(totalPrice_Shipping - response.data.info.TotalPrice)}</p>
-                            </div>
-
+                           
                             <div class="divider"></div>
 
                             <div class="total__info">
                                 <p>Tổng cộng</p>
-                                <p id="totalPrice">${formatCurrency(response.data.info.TotalPrice)}</p>
+                                <p id="totalPrice">${formatCurrency(response.totalPrice)}</p>
                             </div>
                         </div>`
                 // Chèn danh sách sản phẩm vào phần tử HTML
                 $('#product-list').html(productListHtml);
                 $('.wrap').html(html)
                 // Hiển thị tổng giá trị đơn hàng
-                $('#totalPrice').text(formatCurrency(totalPrice_Shipping));
-                var trangThaiDonHang = response.data.orderStatuses;
+                $('#totalPrice').text(formatCurrency(response.totalPrice));
+                var trangThaiDonHang = response.orderStatuses;
 
                 // Lặp qua mỗi trạng thái trong mảng
                 trangThaiDonHang.forEach(function(trangThai) {
 
                     // Lấy thông tin trạng thái và thời gian
-                    var trangThaiValue = trangThai.Status;
-                    var thoiGianValue = trangThai.UpdateTime;
+                    var trangThaiValue = trangThai.status;
+                    var thoiGianValue = trangThai.updateTime;
                     setColorAndTime(trangThaiValue, thoiGianValue);
                 });
             },

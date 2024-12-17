@@ -104,11 +104,10 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Lỗi:', error);
                     console.error('Lỗi chi tiết:', xhr.responseText); // In ra nội dung phản hồi
                     Swal.fire({
                         title: 'Lỗi!',
-                        text: 'Đã xảy ra lỗi khi đăng nhập!',
+                        text: JSON.parse(xhr.responseText).detailMessage,
                         icon: 'error',
                         confirmButtonText: 'OK'
                     });

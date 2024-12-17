@@ -165,14 +165,6 @@
         totalpriceOrigin = totalPrice
     }
 
-
-
-    function updateTotalPrice(saleAmount) {
-        totalpriceall = totalpriceOrigin - saleAmount < 0 ? 0 : totalpriceOrigin - saleAmount;
-        // Cập nhật hiển thị giá đã giảm trên giao diện
-        document.querySelector('#totalPrice').textContent = ` ${formatCurrency(totalpriceall)}`;
-    }
-
     document.getElementById('address').addEventListener('input', function() {
         fillOrderInfo();
     });
@@ -189,21 +181,21 @@
     function loadUserInfoFromsessionStorage() {
         var userData = sessionStorage.getItem("id");
         $.ajax({
-            url: "../../Controllers/UserInformationController.php",
+            url: "http://localhost:8080/Account/" + userData,
             method: "GET",
-            data: {
-                Id: userData
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
             },
             dataType: "json",
             success: function(response) {
-                document.getElementById('spanHoTen').textContent = response.data.Fullname;
-                document.getElementById('spanSoDienThoai').textContent = response.data.PhoneNumber;
-                document.getElementById('spanDiaChi1').textContent = response.data.Address;
+                document.getElementById('spanHoTen').textContent = response.fullname;
+                document.getElementById('spanSoDienThoai').textContent = response.phoneNumber;
+                document.getElementById('spanDiaChi1').textContent = response.address;
 
-                document.getElementById('username').value = response.data.Fullname;
-                document.getElementById('address1').value = response.data.Address;
+                document.getElementById('username').value = response.fullname;
+                document.getElementById('address1').value = response.address;
 
-                document.getElementById('phonenumber').value = response.data.PhoneNumber;
+                document.getElementById('phonenumber').value = response.phoneNumber;
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -261,17 +253,23 @@
     function updateInfor() {
         const maTaiKhoan = sessionStorage.getItem("id");
         const formData = {
-            accountId: maTaiKhoan,
-            fullname: document.getElementById('username').value,
-            phone: document.getElementById('phonenumber').value,
-            address: document.getElementById('address1').value
+
         };
 
         $.ajax({
-            url: "../../Controllers/UserInformationController.php",
+            url: "http://localhost:8080/Account/UpdateInformation",
             method: "PATCH",
-            data: JSON.stringify(formData),
-            contentType: "application/json",
+            data: {
+                accountId: maTaiKhoan,
+                fullname: document.getElementById('username').value,
+                phone: document.getElementById('phonenumber').value,
+                address: document.getElementById('address1').value
+            },
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                "Content-Type": "application/x-www-form-urlencoded",
+
+            },
             success: function(response) {},
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -297,36 +295,31 @@
         formData.append('Payment', selectedPaymentMethod)
         if (Array.isArray(listproduct)) {
             listproduct.forEach((item, index) => {
-                formData.append(`listOrderDetail[${index}][productId]`, item.productId);
-                formData.append(`listOrderDetail[${index}][unitPrice]`, item.unitPrice);
-                formData.append(`listOrderDetail[${index}][quantity]`, item.quantity);
-                formData.append(`listOrderDetail[${index}][total]`, item.total);
+                formData.append(`listOrderDetail[${index}].productId`, item.productId);
+                formData.append(`listOrderDetail[${index}].unitPrice`, item.unitPrice);
+                formData.append(`listOrderDetail[${index}].quantity`, item.quantity);
+                formData.append(`listOrderDetail[${index}].total`, item.unitPrice * item.quantity);
             });
         } else {
             console.error("Dữ liệu giỏ hàng không hợp lệ");
         }
 
-        if (selectedPaymentMethod === "VNPAY") {
 
-            // Lưu các trường cần thiết từ formData vào localStorage
-            const orderData = {};
-            formData.forEach((value, key) => {
-                orderData[key] = value; // Lưu trữ dữ liệu từ FormData vào đối tượng
-            });
+        $.ajax({
+            url: "http://localhost:8080/Order/User",
+            method: "POST",
+            data: formData,
+            processData: false, // Ngăn jQuery xử lý dữ liệu
+            contentType: false, // Ngăn jQuery thiết lập tiêu đề `Content-Type`
 
-            // Chỉ lưu trữ dưới dạng JSON những trường cần thiết
-            localStorage.setItem("donHangDangThanhToan", JSON.stringify(orderData));
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token') // Thay 'yourTokenKey' bằng khóa lưu token của bạn
+            },
+            success: function(response) {
+                if (response.url != null) {
+                    window.location.href = response.url;
 
-
-            thanhToanVNPay(orderId, totalpriceall);
-        } else {
-            $.ajax({
-                url: "../../Controllers/OrderController.php",
-                method: "POST",
-                data: formData,
-                processData: false, // Ngăn jQuery xử lý dữ liệu
-                contentType: false, // Ngăn jQuery thiết lập tiêu đề `Content-Type`
-                success: function(response) {
+                } else {
                     Swal.fire({
                         title: 'Đặt hàng thành công!',
                         text: 'Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất có thể.',
@@ -338,52 +331,15 @@
                             window.location.href = 'HomePage.php'; // Chuyển hướng đến trang sản phẩm
                         }
                     });
-                },
-                error: function(xhr, status, error) {
-                    console.error("Lỗi:", error);
                 }
-            });
-        }
+            },
+            error: function(xhr, status, error) {
+                console.error("Lỗi:", error);
+            }
+        });
 
 
-    }
 
-    function thanhToanVNPay(orderId, totalpriceall) {
-        // Tạo form mới
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "./vnpay_payment/xuLyThanhToan_vnpay.php";
-
-        // Thêm các dữ liệu cần thiết vào form
-        const orderIdInput = document.createElement("input");
-        orderIdInput.type = "hidden";
-        orderIdInput.name = "order_id";
-        orderIdInput.value = orderId;
-        form.appendChild(orderIdInput);
-
-        const orderDescInput = document.createElement("input");
-        orderDescInput.type = "hidden";
-        orderDescInput.name = "order_desc";
-        orderDescInput.value = `Khách hàng ${document.getElementById('username').value} thanh toán đơn hàng ${orderId}`;
-        form.appendChild(orderDescInput);
-
-        const amountInput = document.createElement("input");
-        amountInput.type = "hidden";
-        amountInput.name = "amount";
-        amountInput.value = totalpriceall;
-        form.appendChild(amountInput);
-
-
-        // Tạo nút submit có name="redirect"
-        const submitButton = document.createElement("button");
-        submitButton.type = "submit";
-        submitButton.name = "redirect";
-        submitButton.style.display = "none"; // Ẩn nút
-        form.appendChild(submitButton);
-
-        // Thêm form vào body và submit
-        document.body.appendChild(form);
-        submitButton.click(); // Kích hoạt submit
     }
 </script>
 

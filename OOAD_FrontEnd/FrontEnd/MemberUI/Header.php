@@ -124,7 +124,7 @@
 
         <!-- Icons Section -->
         <div class="col-12 col-md-4 d-flex justify-content-center align-items-center gap-4" style="height: fit-content;">
-            <div class="header-option" onclick="toCart()" style="height: fit-content;">
+            <div class="header-option header-option-login" onclick="toCart()" style="height: fit-content;">
                 <i class="fa-solid fa-cart-shopping"></i>
             </div>
             <div class="header-option  header-option-login" onclick="toMyOrder()" style="height: fit-content;">
@@ -155,7 +155,7 @@
         document.getElementById("searchSanPham").value = searchFromAnotherPage1;
     }
     // Kiểm tra xem 'role' có tồn tại trong Session Storage không
-    if (sessionStorage.getItem('role')) {
+    if (sessionStorage.getItem('id')) {
         // Nếu role tồn tại, ẩn nút bằng cách thêm thuộc tính 'hidden'
         document.getElementById("Home-login").style.display = 'none';
 
@@ -265,6 +265,7 @@
                 sessionStorage.removeItem("id");
                 sessionStorage.removeItem("email");
                 sessionStorage.removeItem("role");
+                sessionStorage.removeItem("cart");
 
                 // Chuyển hướng về trang chủ khách
                 window.location.href = "./HomePage.php";

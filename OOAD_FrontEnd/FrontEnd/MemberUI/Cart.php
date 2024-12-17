@@ -78,7 +78,7 @@
     function toCreateOrder() {
         var numberOfItemsInCart = $('.cartItem').length;
 
-        var role = sessionStorage.getItem('role'); // or sessionStorage.getItem('role');
+        var role = sessionStorage.getItem('id'); // or sessionStorage.getItem('role');
         if (role) {
             // The user is logged in and has a role, proceed with the order confirmation
             if (numberOfItemsInCart === 0) {
