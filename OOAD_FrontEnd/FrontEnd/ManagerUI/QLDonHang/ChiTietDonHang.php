@@ -56,7 +56,7 @@
                                                 </div>
                                             </div>
                                             <div class="transaction_items__wrapper">
-                                                <p class="transaction_name">Trạng thái:
+                                                <p class="transaction_name">Danh sách sản phẩm
                                                     <span class="" id="trangthai"></span>
                                                 </p>
                                                 <div class="divider"></div>
