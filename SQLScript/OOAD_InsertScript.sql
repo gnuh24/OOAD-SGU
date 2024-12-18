@@ -28,7 +28,7 @@ INSERT INTO `Brand` (`BrandName`) VALUES
                     
 -- INSERT INTO Product	
 INSERT INTO `Product` (`Id`, `ProductName`, 						`Status`, 		`CreateTime`, 			`Image`, 											`Origin`, 		`Capacity`, 	`ABV`, 					`Description`, 					`BrandId`, `CategoryId`) VALUES
-						(1, 'HaKu Vodka', 							TRUE, 			'2024-07-03 10:00:00', 'SoftwareTestingProject/hakuvodka', 					'Japan',		 	700, 			40, 		 		'A smooth Japanese vodka.', 		2, 				2),
+						(1, 'HaKu Vodka', 							TRUE, 			'2024-07-03 10:00:00', 'SoftwareTestingProject/hakuVodka', 					'Japan',		 	700, 			40, 		 		'A smooth Japanese vodka.', 		2, 				2),
 						(2, 'HaNoi VodKa', 							TRUE, 			'2024-07-05 10:00:00', 'SoftwareTestingProject/hanoiVodka', 				'Vietnam', 			500, 			39, 		 		'Classic Vietnamese vodka.', 		3, 				2),
 						(3, 'Beluga Noble', 						TRUE, 			'2024-07-05 10:00:00', 'SoftwareTestingProject/belugaNoble', 				'Russia', 			700,			40, 		 		'Premium Russian vodka.', 			4, 				2),
 						(4, 'Grey Goose', 							TRUE, 			'2024-07-05 10:00:00', 'SoftwareTestingProject/greyGoose', 					'France', 			750, 			40, 				'French luxury vodka.', 			5, 				2),

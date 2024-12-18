@@ -207,7 +207,7 @@
                         loadDataToTable(udPage, udminNgayTao, udmaxNgayTao, udtrangThai);
                     },
                     error: function(error) {
-                        Swal.fire('Thất bại!', error.responseJSON.detailMessage, 'error');
+                        Swal.fire('Thất bại!', error.responseJSON.message, 'error');
                     }
                 });
             }
