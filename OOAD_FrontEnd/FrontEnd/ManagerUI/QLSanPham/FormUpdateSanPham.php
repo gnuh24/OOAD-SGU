@@ -121,6 +121,12 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const userRole1 = sessionStorage.getItem('role');
+
+        if (userRole1 == 'Employee') {
+            const createProductBtn = document.getElementById('updateUser_save');
+            createProductBtn.style.display = 'none';
+        }
         getCategories();
         getBrand();
         fetchProductDetails(<?php echo $_GET['maSanPham'] ?>);

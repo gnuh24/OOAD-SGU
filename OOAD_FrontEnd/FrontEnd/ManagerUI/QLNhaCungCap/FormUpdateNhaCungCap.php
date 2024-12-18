@@ -83,6 +83,12 @@
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
+    const userRole1 = sessionStorage.getItem('role');
+
+    if (userRole1 == 'Employee') {
+        const createProductBtn = document.getElementById('updateSupplier_save');
+        createProductBtn.style.display = 'none';
+    }
     const NCCNamePara = urlParams.get('brandName');
     document.getElementById("updateSupplier_save").addEventListener('click', function check(event) {
         event.preventDefault(); // Ngăn chặn hành động mặc định của form

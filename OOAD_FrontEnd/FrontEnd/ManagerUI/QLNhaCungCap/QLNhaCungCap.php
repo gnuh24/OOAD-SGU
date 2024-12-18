@@ -43,7 +43,7 @@
                             padding: 1rem;
                             border-radius: 0.6rem;
                             cursor: pointer;
-                          ">
+                          " id="btnAddBrand">
                         <a href="./FormCreateNhaCungCap.php"> Thêm Thương Hiệu</a>
                       </button>
                     </div>
@@ -97,6 +97,13 @@
 
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+    if (userRole1 == 'Employee') {
+      const btnAddBrand = document.getElementById('btnAddBrand');
+      btnAddBrand.style.display = 'none';
+    }
+  });
   // Hàm để xóa hết các dòng trong bảng
   function clearTable() {
     var tableBody = document.querySelector('.Table_table__BWPy tbody');
@@ -139,9 +146,19 @@
             htmlContent += `
                     <p>Mặc định</p>`;
           } else {
-            htmlContent += `
-                    <button style="cursor:pointer" class="edit" onclick="updateNhaCungCap(${record.brandId}, '${record.brandName}')">Sửa</button>
-                    <button style="cursor:pointer" class="delete" onclick="deleteNhaCungCap(${record.brandId}, '${record.brandName}')">Xoá</button>`;
+            if (userRole1 == 'Employee') {
+              htmlContent += `
+                    <button style="cursor:pointer" class="edit" onclick="updateNhaCungCap(${record.brandId}, '${record.brandName}')">Xem chi tiết</button>`;
+            } else {
+              htmlContent += ` <
+                button style = "cursor:pointer"
+              class = "edit"
+              onclick = "updateNhaCungCap(${record.brandId}, '${record.brandName}')" > Sửa < /button> <
+                button style = "cursor:pointer"
+              class = "delete"
+              onclick = "deleteNhaCungCap(${record.brandId}, '${record.brandName}')" > Xoá < /button>`;
+            }
+
           }
 
           htmlContent += `</td>
@@ -152,6 +169,7 @@
 
         // Thiết lập lại nội dung của tbody bằng chuỗi tableContent
         tableBody.innerHTML = tableContent;
+
 
         //Tạo phân trang
         createPagination(page, response.totalPages);

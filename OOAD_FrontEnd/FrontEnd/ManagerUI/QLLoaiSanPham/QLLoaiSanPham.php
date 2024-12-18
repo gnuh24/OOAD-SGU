@@ -29,7 +29,7 @@
                           padding-bottom: 1rem;
                         ">
                       <h2>Loại Sản Phẩm</h2>
-                      <button style="
+                      <button id="btnAddCate" style="
                             margin-left: auto;
                             font-family: Arial;
                             font-size: 1.5rem;
@@ -92,6 +92,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Thêm thư viện SweetAlert2 -->
 
 <script>
+  if (userRole1 == 'Employee') {
+    const btnAddCate = document.getElementById('btnAddCate');
+    btnAddCate.style.display = 'none';
+  }
   // Hàm để xóa hết các dòng trong bảng
   function clearTable() {
     var tableBody = document.querySelector('.Table_table__BWPy tbody');
@@ -133,10 +137,20 @@
           if (record.id == 1) {
             htmlContent += `Mặc định`;
           } else {
+            if (userRole1 == 'Employee') {
+              htmlContent += `
+                    <button style="cursor:pointer" class="edit" onclick="updateLoaiSanPham(${record.id}, '${record.categoryName}')">Xem chi tiết</button>`;
+            } else {
+              htmlContent += ` <
+                button style = "cursor:pointer"
+              class = "edit"
+              onclick = "updateLoaiSanPham(${record.id}, '${record.categoryName}')" > Sửa < /button> <
+                button style = "cursor:pointer"
+              class = "delete"
+              onclick = "deleteLoaiSanPham(${record.id}, '${record.categoryName}')" > Xoá < /button>`;
+            }
             // Nếu không phải Loại sản phẩm có ID là 1, thì in ra nút sửa và nút xoá
-            htmlContent += `
-                    <button style="cursor:pointer" class="edit" onclick="updateLoaiSanPham(${record.id}, '${record.categoryName}')">Sửa</button>
-                    <button style="cursor:pointer" class="delete" onclick="deleteLoaiSanPham(${record.id}, '${record.categoryName}')">Xoá</button>`;
+
           }
 
           htmlContent += `</td>

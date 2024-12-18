@@ -110,6 +110,11 @@
 </body>
 
 <script>
+    if (userRole1 == 'Employee') {
+        const createProductBtn = document.getElementById('createProductBtn');
+        createProductBtn.style.display = 'none';
+    }
+
     function toCreateForm() {
         window.location.href = "FormCreateSanPham.php";
     }
@@ -162,13 +167,22 @@
                         <td style="text-align: center;">${record.category.categoryName}</td>
 
                         <td style="text-align: center;">${record.brand.brandName}</td>
-                                               <td style="text-align: center;">${record.quantity}</td>
+                                               <td style="text-align: center;">${record.quantity}</td>`;
+                        if (userRole1 == 'Employee') {
+                            trContent += `                   
+                                        <td>
+                                            <button class="edit" onclick="toUpdate(${record.id})">Xem chi tiết</button>
+                                        </td>
+                                    </tr>`;
+                        } else {
+                            trContent += `                   
+                                            <td>
+                                                <button class="edit" onclick="toUpdate(${record.id})">Sửa</button>
+                                                <button class="${buttonClass}" data-action="${buttonData}" onclick="handleLockUnlock(${record.id}, ${record.status})">${buttonText}</button>
+                                            </td>
+                                        </tr>`;
+                        }
 
-                        <td>
-                            <button class="edit" onclick="toUpdate(${record.id})">Sửa</button>
-                            <button class="${buttonClass}" data-action="${buttonData}" onclick="handleLockUnlock(${record.id}, ${record.status})">${buttonText}</button>
-                        </td>
-                    </tr>`;
                         tableContent += trContent;
                     });
                 } else {

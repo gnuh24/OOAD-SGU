@@ -38,7 +38,7 @@
                 sessionStorage.removeItem('id');
                 sessionStorage.removeItem('token');
                 // Chuyển hướng về trang đăng nhập
-                window.location.href = "../../MemberUI/Login/AdminLoginUI.php";
+                window.location.href = "/../MemberUI/Login/AdminLoginUI.php";
 
 
             }

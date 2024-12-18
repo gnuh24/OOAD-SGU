@@ -34,7 +34,6 @@
         const QLLoaiSanPham = document.getElementById('QLLoaiSanPham');
         const QLSanPham = document.getElementById('QLSanPham');
         const QLThuongHieu = document.getElementById('QLThuongHieu');
-        const QLKhuyenMai = document.getElementById('QLKhuyenMai');
         const QLDonHang = document.getElementById('QLDonHang');
         const QLPNK = document.getElementById('QLPhieuNhapKho');
         const ThongKeBanChay = document.getElementById('ThongKeBanChay');
@@ -49,7 +48,6 @@
             QLLoaiSanPham.style.display = 'none';
             QLSanPham.style.display = 'none';
             QLThuongHieu.style.display = 'none';
-            QLKhuyenMai.style.display = 'none';
             QLDonHang.style.display = 'none';
             QLPNK.style.display = 'none';
             ThongKeBanChay.style.display = 'none';
